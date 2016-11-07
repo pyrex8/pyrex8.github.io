@@ -91,12 +91,18 @@ var blocky =
 
 
 
-	document.addEventListener("keydown", keyDownHandler, false);
+	document.addEventListener('keydown', keyDownHandler, false);
+
+
+    	document.body.addEventListener('touchstart', keyDownHandler, false);
+
+
+	document.body.addEventListener('click', keyDownHandler, false);
+
+ 
 
 	function keyDownHandler(e) {
-	    if(e.keyCode == 32) {
-	        fire0 = true;
-	    }
+	     fire0 = true;
 	}
 
 
