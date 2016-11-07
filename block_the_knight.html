@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="atari.js" type="text/javascript"></script> 
+	<script src="game_data.js" type="text/javascript"></script> 
+    <meta charset="utf-8" />
+    <title>Block the Knight</title>
+    <h1 align="center"> Block the Knight</h1>
+    <style>
+    	* { padding: 0; margin: 0; }
+    	canvas { background: #eee; display: block; margin: 0 auto; }
+    </style>
+</head>
+<body>
+<audio id="play1" src="blip.wav"></audio>
+<audio id="play2" src="crash.wav"></audio>
+
+<canvas id="myCanvas" width="640" height="416"></canvas>
+
+<p align="center"> PyWeek 22: “You can't let him in here” </p>
+
+<script>
+
+var blocky =
+
+          ['XXXX    '
+          ,'XXXX    '
+          ,'XXXX    '
+          ,'XXXX    '];
+
+	var canvas = document.getElementById("myCanvas");
+	var ctx = canvas.getContext("2d");
+	var x = (canvas.width/2)*1000;
+	var y = 0;
+	var dx = 200;
+	var thisTime = 0;
+	var lastTime = Date.now();
+	var dt = 1
+	var max_dt = 1
+
+	var spacePressed = false;
+
+
+	var field_width = 12;
+	var NUM_LEVELS = 30;
+
+	var color_p0 = 2 + (8 * 3);
+	var color_p1 = 1 + (8 * 5);
+	var color_pf = 3 + (8 * 8);
+	var color_bk1 = 0 + (8 * 1);
+	var color_bk2 = 7 + (8 * 1);
+
+
+	var direction0 = 0;
+	var fire0 = false;
+
+	var anamation = 0.0;
+	var nemesis_y = 42.0;
+	var direction1 = -1.0;
+	var fire = 0;
+	var fire_x = 0;
+	var fire_y = 0;
+	var fire_v = 0;
+
+	var retries = 0;
+	var level_number = 1;
+
+	var skip_level = 0;
+	var game_done = 0;
+
+	var t = 0;
+	var pos_x = 4;
+	var pos_y = (SCREEN_Y/2 + field_width) * 50;
+	var vel_x = 0;
+	var vel_y = 0;
+	var height0 = 4;
+	var direction0 = -1.0;
+
+	var jumping = 0 ;
+
+
+
+	function playSound (snum) {
+	  if (snum == 1){
+	    document.getElementById('play1').play();
+	  }
+	  if (snum == 2){
+	    document.getElementById('play2').play();
+	  }  
+	}
+
+
+
+	document.addEventListener("keydown", keyDownHandler, false);
+
+	function keyDownHandler(e) {
+	    if(e.keyCode == 32) {
+	        fire0 = true;
+	    }
+	}
+
+
+
+	function draw() {
+	    // drawing code
+	    thisTime = Date.now()
+	    dt = thisTime - lastTime
+	    lastTime = thisTime
+	    if (dt > max_dt)
+	   	{
+	   		max_dt = dt;
+	   	}
+
+
+	    dt = dt/3;
+		x += dx * dt;
+		reset_collision();
+	  
+	    background(0, SCREEN_Y, color_bk1);
+	    background(SCREEN_Y/2 - field_width, 2* field_width, color_bk2);
+
+	    anamation += dt/100.0;
+	    if (anamation >= 2.0){
+	        anamation = 0.0;
+	    }
+		    
+	    var d = Math.trunc(fire_x/50)
+
+	    if ((level_number < NUM_LEVELS) && (vel_x > 0)){
+	        nemesis_y += direction1 * dt/100.0; 
+	        missile1(d, fire_y + 6, 1, 1, color_p1);
+	    }
+
+
+	    if (nemesis_y < (SCREEN_Y/2 - field_width) - 4){
+	        nemesis_y = 42.0;
+	    }
+
+	    if (nemesis_y > (SCREEN_Y/2 + field_width) + 4){
+	        nemesis_y = 42.0;
+	    }
+
+	    pos_x += vel_x * dt/50.0;
+	    pos_y += vel_y * dt/50.0;
+
+	    if (pos_y > (SCREEN_Y/2 + field_width) * 50){
+	        vel_y = 0;
+	        pos_y = (SCREEN_Y/2 + field_width) * 50;
+	        jumping = 0;
+	        direction0 = -1.0;
+	    }
+
+	    if (pos_y < (SCREEN_Y/2 - field_width + height0) * 50){
+	        vel_y = 0;
+	        pos_y = (SCREEN_Y/2 - field_width + height0)*50;
+	        jumping = 0;
+	        direction0 = 1.0;
+	    }
+
+
+	    if (pos_x > (SCREEN_X + 7)*50){
+	        level_number += 1;
+	        if (level_number > NUM_LEVELS){
+	            level_number = NUM_LEVELS;
+	        }
+	        pos_x = 0;
+	        pos_y = (SCREEN_Y/2 + field_width)*50;
+	        jumping = 0;
+	        direction0 = -1.0;
+	        color_p0 = (color_p0 + 8) & 0x7F;
+	        color_p1 = (color_p1 + 8) & 0x7F; 
+	        color_pf = (color_pf + 8) & 0x7F;
+	        color_bk1 = (color_bk1 + 8) & 0x7F;
+	        color_bk2 = (color_bk2 + 8) & 0x7F;
+	        fire = 0;
+	    }
+
+	    if (level_number == NUM_LEVELS){
+	        pos_x = (SCREEN_X- 14)*50;
+	        pos_y = (SCREEN_Y/2 + 2) * 50;
+	    }
+
+	    player0(Math.trunc(pos_x/50), Math.trunc(pos_y/50)-4, blocky, color_p0);
+
+    	var a = Math.trunc(anamation);
+	    var b = level_number - 1;
+	    c =  Math.trunc(nemesis_y)
+	    for (var i = 0; i < 6; i++){ 
+	        playfield(40 + 4*i, 4, level[i+6*b], color_pf);
+	    }
+
+	    if (direction1 < 0){
+	        missile0(152, SCREEN_Y/2 - field_width - 1, 8, 1, color_p0);
+	    }
+	    else{
+	        missile0(152, SCREEN_Y/2 + field_width, 8, 1, color_p0);   
+	    }
+
+
+	    if (fire == 0){
+	        fire = 1;
+	        fire_x = 152 * 50;
+	        fire_y = c;
+	        fire_v = -120;
+	    }
+	    else{
+	        fire_x += fire_v*dt/50.0;
+	    }
+
+	    if (fire_x < 0){
+	        fire_x = 0;
+	        fire = 0;
+	    }
+
+	    player1(152, c, nemesis.slice((b*24)+(a*12),(b*24)+(a*12)+12), color_p1);
+
+	    if (retries > 999){
+	        retries = 999;
+	    }
+
+	    number(9, 2, retries, color_p0);
+	    number(24, 2, level_number, color_p0);
+
+	    print_large(28, 2, '-30', color_p0);
+
+
+	    //# Start screen
+	    if ((vel_x == 0) && (level_number == 1)){
+	        vel_x = 0;
+	        vel_y = 0;
+	        pos_x = 0 ;
+	        pos_y = (SCREEN_Y/2 + field_width) * 50 ;
+	        print_large(2, 2+16, '  SPACE', color_p0);
+	        print_large(2, 2+24, ' TO START', color_p0);
+	    }
+
+	    //# End SCREEN
+	    if (level_number == NUM_LEVELS){
+	        vel_x = 0;
+	        vel_y = 0;
+	        pos_x = 0;
+	        pos_y = (SCREEN_Y/2 + field_width) * 50 ;   
+	        print_large(2, 2+16, '   YOU', color_p0);
+	        print_large(2, 2+24,  ' DID IT!', color_p0);
+	    }
+
+
+        if (get_collision(P0, P1) == 1){
+            playSound(2);
+            retries += 1
+            vel_y = 0
+            pos_x = 0
+            pos_y = (SCREEN_Y/2 + field_width) * 50
+            jumping = 0
+            direction0 = -1.0
+            fire = 0
+        }
+
+	    if (get_collision(P0, M1) == 1){
+	        playSound(2);
+	        retries += 1;
+	        vel_y = 0;
+	        pos_x = 0;
+	        pos_y = (SCREEN_Y/2 + field_width) * 50;
+	        jumping = 0;
+	        direction0 = -1.0;
+	        fire = 0;
+	    }
+
+	    if (get_collision(M1, PF) == 1){
+	        fire = 0;
+	    }
+
+	    if (get_collision(P0, PF) == 1){
+	        playSound(2);
+	        retries += 1;
+	        vel_y = 0;
+	        pos_x = 0;
+	        pos_y = (SCREEN_Y/2 + field_width) * 50;
+	        jumping = 0;
+	        direction0 = -1.0;
+	        fire = 0;
+	    }
+
+	    if (get_collision(P1, M0) == 1){
+	        direction1 = -direction1;
+	    }
+
+
+	    if (fire0 == true){
+	        fire0 = false;
+	        if (vel_x > 0){
+	            if (jumping == 0){
+	                playSound(1);                      
+	                jumping = 1;
+	                vel_y = 180 * direction0;
+	            }
+	        }
+	        else{
+	            vel_x = 240;
+	        }
+
+	    }
+		
+	    requestAnimationFrame(draw);
+	}
+
+	draw();
+</script>
+
+</body>
+</html>
