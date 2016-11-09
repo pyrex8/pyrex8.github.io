@@ -444,6 +444,21 @@ var collision_detection = new Array(NUMBER_OF_OBJECTS);
 var collision_array = new Array(SCREEN_X * SCREEN_Y);
 
 
+function screen(){
+    //"""rescale window"""
+    var p_width = window.innerWidth/SCREEN_X;
+    var p_height = window.innerHeight/SCREEN_Y;
+    if (p_width < p_height){
+        ctx.canvas.width = Math.trunc(p_width)*SCREEN_X;
+        ctx.canvas.height = Math.trunc(p_width)*SCREEN_Y;
+    }
+    else{
+        ctx.canvas.width = Math.trunc(p_height)*SCREEN_X;
+        ctx.canvas.height = Math.trunc(p_height)*SCREEN_Y;
+    }
+}
+
+
 function rectangle(x, y, width, height, color){
     //"""draw rectangle with scaling"""
     var pixel_width = canvas.width/SCREEN_X;
