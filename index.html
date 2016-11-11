@@ -18,21 +18,6 @@
 
 
 <script>
-var context = new (window.AudioContext || window.webkitAudioContext)();
-
-function onPause() {
-    context.suspend();
-}
-
-function onResume() {
-    context.resume();
-}
-
-function onAmazonPlatformReady() {
-    document.addEventListener("pause" , onPause, false);
-    document.addEventListener("resume" , onResume, false); }
-
-document.addEventListener("amazonPlatformReady" , onAmazonPlatformReady, false);
 	
 function setSource() {
   var sound1 = document.getElementById('play1');
