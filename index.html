@@ -19,11 +19,35 @@
 
 <script>
 
-document.getElementById('play1').play();
-document.getElementById('play1').pause();
-document.getElementById('play2').play();
-document.getElementById('play2').pause();	
-	
+function setSource() {
+  var sound1 = document.getElementById('play1');
+  sound1.src = "blip.wav";
+}
+
+function mediaPlaybackRequiresUserGesture() {
+  // test if play() is ignored when not called from an input event handler
+  var sound1 = document.getElementById('play1');
+  sound1.play();
+  return sound1.paused;
+}
+
+function removeBehaviorsRestrictions() {
+  var sound1 = document.getElementById('play1');
+  sound1.load();
+  window.removeEventListener('keydown', removeBehaviorsRestrictions);
+  window.removeEventListener('mousedown', removeBehaviorsRestrictions);
+  window.removeEventListener('touchstart', removeBehaviorsRestrictions);
+  setTimeout(setSource, 1000);
+}
+
+if (mediaPlaybackRequiresUserGesture()) {
+  window.addEventListener('keydown', removeBehaviorsRestrictions);
+  window.addEventListener('mousedown', removeBehaviorsRestrictions);
+  window.addEventListener('touchstart', removeBehaviorsRestrictions);
+} else {
+  setSource();
+}
+
 var blocky =
 
           ['XXXX    '
@@ -97,7 +121,7 @@ var blocky =
 	document.addEventListener('keydown', keyDownHandler, false);
 
 
-    	document.body.addEventListener('touchstart', keyDownHandler, false);
+    document.body.addEventListener('touchstart', keyDownHandler, false);
 
 
 	document.body.addEventListener('click', keyDownHandler, false);
@@ -106,6 +130,7 @@ var blocky =
 
 	function keyDownHandler(e) {
 	     fire0 = true;
+	
 	}
 
 
@@ -126,6 +151,7 @@ var blocky =
 		screen();
 		reset_collision();
 	  
+
 	    background(0, SCREEN_Y, color_bk1);
 	    background(SCREEN_Y/2 - field_width, 2* field_width, color_bk2);
 
