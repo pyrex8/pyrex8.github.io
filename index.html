@@ -10,7 +10,7 @@
     	canvas { background: #eee; display: block; margin: 0 auto; }
     </style>
 </head>
-<body>
+<body bgcolor="#000000">
 
 <canvas id="myCanvas" width="640" height="416"></canvas>
 
@@ -79,30 +79,40 @@ var blocky =
 	function playSound (snum) {
 	  if (snum == 1){
 		// create web audio api context
-		var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+		var audioCtx1 = new (window.AudioContext || window.webkitAudioContext)();
 
 		// create Oscillator node
-		var oscillator = audioCtx.createOscillator();
+		var oscillator1 = audioCtx1.createOscillator();
+		var gain1 = audioCtx1.createGain();
 
-		oscillator.type = 'square';
-		oscillator.frequency.value = 440; // value in hertz
-		oscillator.connect(audioCtx.destination);
-		oscillator.start(0);
-		oscillator.stop(0.1);
+		oscillator1.type = 'square';
+		oscillator1.frequency.value = 440; // value in hertz
+		gain1.gain.value = 0.3;
+
+		oscillator1.connect(gain1);
+		gain1.connect(audioCtx1.destination);
+
+		oscillator1.start(0);
+		oscillator1.stop(0.1);
 
 	  }
 	  if (snum == 2){
 		// create web audio api context
-		var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+		var audioCtx2 = new (window.AudioContext || window.webkitAudioContext)();
 
 		// create Oscillator node
-		var oscillator = audioCtx.createOscillator();
+		var oscillator2 = audioCtx2.createOscillator();
+		var gain2 = audioCtx2.createGain();
 
-		oscillator.type = 'square';
-		oscillator.frequency.value = 44; // value in hertz
-		oscillator.connect(audioCtx.destination);
-		oscillator.start(0);
-		oscillator.stop(0.1);
+		oscillator2.type = 'square';
+		oscillator2.frequency.value = 44; // value in hertz
+		gain2.gain.value = 0.3;
+
+		oscillator2.connect(gain2);
+		gain2.connect(audioCtx2.destination);
+
+		oscillator2.start(0);
+		oscillator2.stop(0.1);
 
 	  }  
 	}
