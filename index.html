@@ -11,58 +11,11 @@
     </style>
 </head>
 <body>
-<audio id="play1" src="blip.wav" type="audio/wav"></audio>
-<audio id="play2" src="crash.wav" type="audio/wav"></audio>
 
 <canvas id="myCanvas" width="640" height="416"></canvas>
 
 
 <script>
-
-// create web audio api context
-//var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-// create Oscillator node
-//var oscillator = audioCtx.createOscillator();
-
-//oscillator.type = 'square';
-//oscillator.frequency.value = 440; // value in hertz
-//oscillator.connect(audioCtx.destination);
-//oscillator.start();
-
-	
-function setSource() {
-  var sound1 = document.getElementById('play1');
-  var sound2 = document.getElementById('play2');
-  sound1.src = "blip.wav";
-  sound2.src = "crash.wav";
-}
-
-function mediaPlaybackRequiresUserGesture() {
-  // test if play() is ignored when not called from an input event handler
-  var sound1 = document.getElementById('play1');
-  sound1.play();
-  return sound1.paused;
-}
-
-function removeBehaviorsRestrictions() {
-  var sound1 = document.getElementById('play1');
-  var sound2 = document.getElementById('play2');
-  sound1.load();
-  sound2.load();
-  window.removeEventListener('keydown', removeBehaviorsRestrictions);
-  window.removeEventListener('mousedown', removeBehaviorsRestrictions);
-  window.removeEventListener('touchstart', removeBehaviorsRestrictions);
-  setTimeout(setSource, 1000);
-}
-
-if (mediaPlaybackRequiresUserGesture()) {
-  window.addEventListener('keydown', removeBehaviorsRestrictions);
-  window.addEventListener('mousedown', removeBehaviorsRestrictions);
-  window.addEventListener('touchstart', removeBehaviorsRestrictions);
-} else {
-  setSource();
-}
 
 var blocky =
 
@@ -125,10 +78,32 @@ var blocky =
 
 	function playSound (snum) {
 	  if (snum == 1){
-	    document.getElementById('play1').play();
+		// create web audio api context
+		var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+		// create Oscillator node
+		var oscillator = audioCtx.createOscillator();
+
+		oscillator.type = 'square';
+		oscillator.frequency.value = 440; // value in hertz
+		oscillator.connect(audioCtx.destination);
+		oscillator.start(0);
+		oscillator.stop(0.1);
+
 	  }
 	  if (snum == 2){
-	    document.getElementById('play2').play();
+		// create web audio api context
+		var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+		// create Oscillator node
+		var oscillator = audioCtx.createOscillator();
+
+		oscillator.type = 'square';
+		oscillator.frequency.value = 44; // value in hertz
+		oscillator.connect(audioCtx.destination);
+		oscillator.start(0);
+		oscillator.stop(0.1);
+
 	  }  
 	}
 
