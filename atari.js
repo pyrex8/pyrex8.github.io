@@ -572,7 +572,7 @@ function number(x, y, value, color){
     }
     pstring = value.toString();
     for (var i = 0; i < pstring.length; i++){
-        j = pstring.charAt(i);
+        j = pstring.charAt(pstring.length - 1 - i);
         place_character(x - (i*4), y, j, color);
     }
 }
