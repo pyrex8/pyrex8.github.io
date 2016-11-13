@@ -444,6 +444,58 @@ var collision_detection = new Array(NUMBER_OF_OBJECTS);
 var collision_array = new Array(SCREEN_X * SCREEN_Y);
 
 
+    // create web audio api context
+    var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    var oscillator1;
+    var gain1;
+
+    var oscillator2;
+    var gain2;
+
+    oscillator1 = audioCtx.createOscillator();
+    gain1 = audioCtx.createGain();
+
+    oscillator2 = audioCtx.createOscillator();
+    gain2 = audioCtx.createGain();
+
+    oscillator1.type = 'square';
+    gain1.gain.value = 0.0;
+    oscillator1.frequency.value = 440; // value in hertz
+
+    oscillator2.type = 'square';
+    gain2.gain.value = 0.0;
+    oscillator2.frequency.value = 44; // value in hertz
+    
+    oscillator1.connect(gain1);
+    gain1.connect(audioCtx.destination);
+
+    oscillator2.connect(gain2);
+    gain2.connect(audioCtx.destination);
+
+    oscillator1.start(0);
+    oscillator2.start(0);
+
+    // sound number
+    // freq
+    // volume
+    // type
+
+
+function sound(snum, svol, sfreq, stype) {
+  if (snum == 1){
+    gain1.gain.value = svol;
+    oscillator1.frequency.value = sfreq;
+    oscillator1.type = stype;
+  }
+  if (snum == 2){
+    gain2.gain.value = svol;
+    oscillator2.frequency.value = sfreq;
+    oscillator2.type = stype;
+  }  
+}
+
+
 function screen(){
     //"""rescale window"""
     var p_width = window.innerWidth/SCREEN_X;
@@ -457,7 +509,6 @@ function screen(){
         ctx.canvas.height = Math.trunc(p_height)*SCREEN_Y;
     }
 }
-
 
 function rectangle(x, y, width, height, color){
     //"""draw rectangle with scaling"""
