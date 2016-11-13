@@ -75,51 +75,11 @@ var blocky =
 
 	var sound_duration = 0;
 
-	// create web audio api context
-	var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-	var oscillator1;
-	var gain1;
-
-	var oscillator2;
-	var gain2;
-
-		oscillator1 = audioCtx.createOscillator();
-		gain1 = audioCtx.createGain();
-
-		oscillator2 = audioCtx.createOscillator();
-		gain2 = audioCtx.createGain();
-
-		oscillator1.type = 'square';
-		gain1.gain.value = 0.0;
-		oscillator1.frequency.value = 440; // value in hertz
-
-		oscillator2.type = 'square';
-		gain2.gain.value = 0.0;
-		oscillator2.frequency.value = 44; // value in hertz
-		
-		oscillator1.connect(gain1);
-		gain1.connect(audioCtx.destination);
-
-		oscillator2.connect(gain2);
-		gain2.connect(audioCtx.destination);
-
-		oscillator1.start(0);
-		oscillator2.start(0);
-
-	function playSound (snum) {
-	  if (snum == 1){
-	  	gain1.gain.value = 0.3;
-	  }
-	  if (snum == 2){
-	  	gain2.gain.value = 0.3;
-	  }  
-	}
-
-	function offSound () {
-	  gain1.gain.value = 0;
-	  gain2.gain.value = 0;
-	}
+	var sound_vol = 0.3;
+	var freq_1 = 440;
+	var freq_2 = 44;
+	var type_1 = 'square';
+	var type_2 = 'square';
 
 	document.addEventListener('keydown', keyDownHandler, false);
     document.body.addEventListener('touchstart', keyDownHandler, false);
@@ -149,7 +109,8 @@ var blocky =
 		}
 		else
 		{
-			offSound ();	
+			sound(1, 0, freq_1, type_1);
+			sound(2, 0, freq_2, type_2);	
 		}
 
 
@@ -282,7 +243,7 @@ var blocky =
 	    }
 
         if (get_collision(P0, P1) == 1){
-            playSound(2);
+            sound(2, sound_vol, freq_2, type_2);
             sound_duration = 5; 
             retries += 1
             vel_y = 0
@@ -294,7 +255,7 @@ var blocky =
         }
 
 	    if (get_collision(P0, M1) == 1){
-	        playSound(2);
+	        sound(2, sound_vol, freq_2, type_2);
 	        sound_duration = 5; 
 	        retries += 1;
 	        vel_y = 0;
@@ -310,7 +271,7 @@ var blocky =
 	    }
 
 	    if (get_collision(P0, PF) == 1){
-	        playSound(2);
+	        sound(2, sound_vol, freq_2, type_2);
 	        sound_duration = 5; 
 	        retries += 1;
 	        vel_y = 0;
@@ -330,7 +291,7 @@ var blocky =
 	        fire0 = false;
 	        if (vel_x > 0){
 	            if (jumping == 0){
-	                playSound(1); 
+	                sound(1, sound_vol, freq_1, type_1);
 	                sound_duration = 5;                     
 	                jumping = 1;
 	                vel_y = 180 * direction0;
