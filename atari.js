@@ -83,10 +83,10 @@ var font_3x5 =  [
             ,' X '
             ,'X  '
 
+            ,'   '
             ,'X X'
             ,' X '
             ,'X X'
-            ,'   '
             ,'   '
 
             ,'   '
@@ -444,42 +444,42 @@ var collision_detection = new Array(NUMBER_OF_OBJECTS);
 var collision_array = new Array(SCREEN_X * SCREEN_Y);
 
 
-    // create web audio api context
-    var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+// create web audio api context
+var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-    var oscillator1;
-    var gain1;
+var oscillator1;
+var gain1;
 
-    var oscillator2;
-    var gain2;
+var oscillator2;
+var gain2;
 
-    oscillator1 = audioCtx.createOscillator();
-    gain1 = audioCtx.createGain();
+oscillator1 = audioCtx.createOscillator();
+gain1 = audioCtx.createGain();
 
-    oscillator2 = audioCtx.createOscillator();
-    gain2 = audioCtx.createGain();
+oscillator2 = audioCtx.createOscillator();
+gain2 = audioCtx.createGain();
 
-    oscillator1.type = 'square';
-    gain1.gain.value = 0.0;
-    oscillator1.frequency.value = 440; // value in hertz
+oscillator1.type = 'square';
+gain1.gain.value = 0.0;
+oscillator1.frequency.value = 440; // value in hertz
 
-    oscillator2.type = 'square';
-    gain2.gain.value = 0.0;
-    oscillator2.frequency.value = 44; // value in hertz
-    
-    oscillator1.connect(gain1);
-    gain1.connect(audioCtx.destination);
+oscillator2.type = 'square';
+gain2.gain.value = 0.0;
+oscillator2.frequency.value = 44; // value in hertz
 
-    oscillator2.connect(gain2);
-    gain2.connect(audioCtx.destination);
+oscillator1.connect(gain1);
+gain1.connect(audioCtx.destination);
 
-    oscillator1.start(0);
-    oscillator2.start(0);
+oscillator2.connect(gain2);
+gain2.connect(audioCtx.destination);
 
-    // sound number
-    // freq
-    // volume
-    // type
+oscillator1.start(0);
+oscillator2.start(0);
+
+// sound number
+// freq
+// volume
+// type
 
 
 function sound(snum, svol, sfreq, stype) {
@@ -627,6 +627,55 @@ function number(x, y, value, color){
         place_character(x - (i*4), y, j, color);
     }
 }
+
+
+function place_char(x, y, character, color){
+    //"""Prints a 3x5 font using Player pixels, numbers upper case and some 
+    //special characters"""
+    var k = '';
+    var l = '';
+    var char = character.charCodeAt(0)
+    if ((char < 32) || (char > 96)){
+         char = 63;
+    }
+    char -= 32;
+    for (var j = 0; j < 5; j++){
+        k = font_3x5[(char * 5) + j];
+        for (var i = 0; i < 3; i++){
+            var l = k.charAt(i);
+            if (l == 'X'){
+                rectangle(x + i, y + j, 1, 1, color);    
+                update_collision(P0, x + i, y + j);
+            }
+        }
+    }
+}
+
+
+function print_small(x, y, pstring, color){
+    //"""Prints a string that is left justified using 3x5 chracters in 
+    //Player pixels."""
+    for (var i = 0; i < pstring.length; i++){
+        j = pstring.charAt(i);
+        place_char(x + (i*4), y, j, color);
+    }
+}
+
+
+function number_small(x, y, value, color){
+    //"""Prints a numeric value that is right justified using 3x5 digits in 
+    //Player pixels."""
+    if (value < 0){
+        value -= value;
+    }
+    pstring = value.toString();
+    for (var i = 0; i < pstring.length; i++){
+        j = pstring.charAt(pstring.length - 1 - i);
+        place_char(x - (i*4), y, j, color);
+    }
+}
+
+
 
 
 function playfield(y, height, data, color){
