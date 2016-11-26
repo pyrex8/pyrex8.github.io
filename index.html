@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
 	<script src="atari.js" type="text/javascript"></script> 
-	<script src="game_data.js" type="text/javascript"></script> 
 	<script src="https://resources.amazonwebapps.com/v1/latest/Amazon-Web-App-API.min.js"></script>
     <meta charset="utf-8" />
     <title>Block the Knight</title>
@@ -16,91 +15,104 @@
 <canvas id="myCanvas" width="640" height="416"></canvas>
 
 
-<script>
 
+<script>
 // Game states
 const PAUSED = 1;
 const READY = 0;
 const PLAYING = 2;
 const DONE = 3;
 
+var pman = [
+             '  XXX   '
+            ,' XX XX  '
+            ,'XXXXXXX '
+            ,'    XXX '
+            ,'XXXXXXX '
+            ,' XXXXX  '
+            ,'  XXX   '
 
-var blocky =
+            ,'  XXX   '
+            ,' X X X  '
+            ,'XXXXXXX '
+            ,'X     X '
+            ,'XXXXXXX '
+            ,' XXXXX  '
+            ,'  XXX   '
 
-          ['XXXX    '
-          ,'XXXX    '
-          ,'XXXX    '
-          ,'XXXX    '];
+            ,'  XXX   '
+            ,' XX XX  '
+            ,'XXXXXXX '
+            ,'XXX     '
+            ,'XXXXXXX '
+            ,' XXXXX  '
+            ,'  XXX   '
+
+            ,'  XXX   '
+            ,' XXXXX  '
+            ,'XXXXXXX '
+            ,'XXXXXXX '
+            ,'XXXXXXX '
+            ,' XXXXX  '
+            ,'  XXX   '
+ 
+			];
+
+
+var game_list = [
+             '         BLOCK THE KNIGHT              '
+            ,'         ------                        '
+            ,'         ------                        '
+            ,'         ------                        '
+            ,'         ------                        '
+            ,'         ------                        '
+            ,'         ------                        '
+            ,'         ------                        '
+            ,'         ------                        '
+            ,'         ------                        '
+            ,'         ------                        '
+            ,'         ------                        '
+			];
 
 	var canvas = document.getElementById("myCanvas");
 	var ctx = canvas.getContext("2d");
-	var x = (canvas.width/2)*1000;
-	var y = 0;
-	var dx = 200;
+
 	var thisTime = 0;
 	var lastTime = Date.now();
 	var dt = 1
 
 	var game_state = READY;
-	var spacePressed = false;
 
-	var field_width = 12;
-	var NUM_LEVELS = 30;
+	var animation = 0.0;
+
+	var game_number = 0
 
 	var color_p0 = 2 + (8 * 3);
-	var color_p1 = 1 + (8 * 5);
+	var color_p1 = 15;
 	var color_pf = 3 + (8 * 8);
-	var color_bk1 = 0 + (8 * 1);
-	var color_bk2 = 7 + (8 * 1);
-
-
-	var direction0 = 0;
-	var fire0 = false;
-
-	var anamation = 0.0;
-	var nemesis_y = 42.0;
-	var direction1 = -1.0;
-	var fire = 0;
-	var fire_x = 0;
-	var fire_y = 0;
-	var fire_v = 0;
-
-	var retries = 0;
-	var level_number = 1;
-
-
-	var t = 0;
-	var pos_x = 4;
-	var pos_y = (SCREEN_Y/2 + field_width) * 50;
-	var vel_x = 0;
-	var vel_y = 0;
-	var height0 = 4;
-	var direction0 = -1.0;
-
-	var jumping = 0 ;
+	var color_bk1 = 76;
+	var color_bk2 = 74;
 
 	var sound_duration = 0;
 
 	var sound_vol = 0.3;
-	var freq_1 = 440;
+	var freq_1 = 110;
 	var freq_2 = 44;
 	var type_1 = 'square';
 	var type_2 = 'square';
 
-	document.addEventListener('keydown', keyDownHandler, false);
-    document.body.addEventListener('touchstart', tapDownHandler, false);
-	document.body.addEventListener('click', tapDownHandler, false);
 
+
+	document.addEventListener('keydown', keyDownHandler, false);
 
     function onPause() {
         sound_duration = 0;
         sound(1, 0, freq_1, type_1);
-		sound(2, 0, freq_2, type_2);
-		game_state = PAUSED;	
+		sound(2, 0, freq_2, type_2);	
     }
 
     function onResume() {
-        game_state = PLAYING;
+        sound_duration = 0;
     }
 
     function onAmazonPlatformReady() {
@@ -110,45 +122,47 @@ var blocky =
 
     document.addEventListener("amazonPlatformReady" , onAmazonPlatformReady, false);
 
-	function tapDownHandler() {
-	    fire0 = true;
-	    game_state = PLAYING;
-	}
 
 
 
 	function keyDownHandler(event) {
 		var key = event.which || event.keyCode;
-		if ((key == 13) || (key == 32)){
-			if (game_state < DONE){
-	    		fire0 = true;
-	    		game_state = PLAYING;
-	    	}
-		}
-		if ((key == 19) || (key == 179)){
-			if (game_state == PLAYING){
-	    		onPause();
-	    	}
-	    	else{
-	    		if (game_state == PAUSED){
-	    			game_state = PLAYING;
-	    		}
-	    		else{
-	    			game_state = READY;
-	    		}
+		if (key == 38){
+			//up arrow
+			game_state = PLAYING;
+			if (game_number > 0){
+				game_number -= 1;
+			}
+			else{
+				game_number = 11;
+			}
 
-	    	}
-		}		
+		}
+		if (key == 40){
+			//down arrow
+			game_state = PLAYING;
+			if (game_number < 11){
+				game_number += 1;
+			}
+			else{
+				game_number = 0;
+			}
+		}
+		if ((key == 13) || (key == 32)){
+			location.href = "https://pyrex8.github.io/block_the_knight.html";	
+	 
+		}
+
 	}
 
+
+
 	function draw() {
-	    // drawing code
 	    thisTime = Date.now()
 	    dt = thisTime - lastTime
 	    lastTime = thisTime
 
 	    dt = dt/3;
-		x += dx * dt;
 
 		if (sound_duration > 1){
 			sound_duration -= 1;
@@ -160,211 +174,51 @@ var blocky =
 		}
 
 
-
-	    if (game_state == PAUSED){  
-	        print_large(2, 2+76, '   GAME', color_p0);
-	        print_large(2, 2+84, '  PAUSED', color_p0);
-	    }
-	    else
-	   	{
-			screen();
-			reset_collision();
-		  
-		    background(0, SCREEN_Y, color_bk1);
-		    background(SCREEN_Y/2 - field_width, 2* field_width, color_bk2);
-
-		    anamation += dt/100.0;
-		    if (anamation >= 2.0){
-		        anamation = 0.0;
-		    }
-			    
-		    var d = Math.trunc(fire_x/50)
-
-		    if ((level_number < NUM_LEVELS) && (vel_x > 0)){
-		        nemesis_y += direction1 * dt/100.0; 
-		        missile1(d, fire_y + 6, 1, 1, color_p1);
-		    }
-
-
-		    if (nemesis_y < (SCREEN_Y/2 - field_width) - 4){
-		        nemesis_y = 42.0;
-		    }
-
-		    if (nemesis_y > (SCREEN_Y/2 + field_width) + 4){
-		        nemesis_y = 42.0;
-		    }
-
-		    pos_x += vel_x * dt/50.0;
-		    pos_y += vel_y * dt/50.0;
-
-		    if (pos_y > (SCREEN_Y/2 + field_width) * 50){
-		        vel_y = 0;
-		        pos_y = (SCREEN_Y/2 + field_width) * 50;
-		        jumping = 0;
-		        direction0 = -1.0;
-		    }
-
-		    if (pos_y < (SCREEN_Y/2 - field_width + height0) * 50){
-		        vel_y = 0;
-		        pos_y = (SCREEN_Y/2 - field_width + height0)*50;
-		        jumping = 0;
-		        direction0 = 1.0;
-		    }
-
-		    if (pos_x > (SCREEN_X + 7)*50){
-		        level_number += 1;
-		        if (level_number > NUM_LEVELS){
-		            level_number = NUM_LEVELS;
-		        }
-		        pos_x = 0;
-		        pos_y = (SCREEN_Y/2 + field_width)*50;
-		        jumping = 0;
-		        direction0 = -1.0;
-		        color_p0 = (color_p0 + 8) & 0x7F;
-		        color_p1 = (color_p1 + 8) & 0x7F; 
-		        color_pf = (color_pf + 8) & 0x7F;
-		        color_bk1 = (color_bk1 + 8) & 0x7F;
-		        color_bk2 = (color_bk2 + 8) & 0x7F;
-		        fire = 0;
-		    }
-
-		    if (level_number == NUM_LEVELS){
-		        pos_x = (SCREEN_X- 14)*50;
-		        pos_y = (SCREEN_Y/2 + 2) * 50;
-		    }
-
-		    player0(Math.trunc(pos_x/50), Math.trunc(pos_y/50)-4, blocky, color_p0);
-
-	    	var a = Math.trunc(anamation);
-		    var b = level_number - 1;
-		    c =  Math.trunc(nemesis_y)
-		    for (var i = 0; i < 6; i++){ 
-		        playfield(40 + 4*i, 4, level[i+6*b], color_pf);
-		    }
-
-		    if (direction1 < 0){
-		        missile0(152, SCREEN_Y/2 - field_width - 1, 8, 1, color_p0);
-		    }
-		    else{
-		        missile0(152, SCREEN_Y/2 + field_width, 8, 1, color_p0);   
-		    }
-
-		    if (fire == 0){
-		        fire = 1;
-		        fire_x = 152 * 50;
-		        fire_y = c;
-		        fire_v = -120;
-		    }
-		    else{
-		        fire_x += fire_v*dt/50.0;
-		    }
-
-		    if (fire_x < 0){
-		        fire_x = 0;
-		        fire = 0;
-		    }
-
-		    player1(152, c, nemesis.slice((b*24)+(a*12),(b*24)+(a*12)+12), color_p1);
-
-		    if (retries > 999){
-		        retries = 999;
-		    }
-
-		    number(9, 2, retries, color_p0);
-		    number(24, 2, level_number, color_p0);
-
-		    print_large(28, 2, '-30', color_p0);
-
-		    //# Start screen
-		    if (game_state == READY){
-		    	level_number = 1;
-		        vel_x = 0;
-		        vel_y = 0;
-		        pos_x = 0 ;
-		        pos_y = (SCREEN_Y/2 + field_width) * 50 ;
-		        print_large(2, 2+16, '  SELECT', color_p0);
-		        print_large(2, 2+24, ' TO START', color_p0);
-		    }
-
-		    //# End SCREEN
-		    if (level_number == NUM_LEVELS){
-		    	game_state = DONE;
-		        vel_x = 0;
-		        vel_y = 0;
-		        pos_x = 0;
-		        pos_y = (SCREEN_Y/2 + field_width) * 50 ;   
-		        print_large(2, 2+16, '   YOU', color_p0);
-		        print_large(2, 2+24, ' DID IT!', color_p0);
-
-		        print_large(3, 2+76, 'USE PAUSE', color_p0);
-		        print_large(1, 2+84, 'TO RESTART', color_p0);
-		    }
-
-	        if (get_collision(P0, P1) == 1){
-	            sound(2, sound_vol, freq_2, type_2);
-	            sound_duration = 5; 
-	            retries += 1
-	            vel_y = 0
-	            pos_x = 0
-	            pos_y = (SCREEN_Y/2 + field_width) * 50
-	            jumping = 0
-	            direction0 = -1.0
-	            fire = 0
-	        }
-
-		    if (get_collision(P0, M1) == 1){
-		        sound(2, sound_vol, freq_2, type_2);
-		        sound_duration = 5; 
-		        retries += 1;
-		        vel_y = 0;
-		        pos_x = 0;
-		        pos_y = (SCREEN_Y/2 + field_width) * 50;
-		        jumping = 0;
-		        direction0 = -1.0;
-		        fire = 0;
-		    }
-
-		    if (get_collision(M1, PF) == 1){
-		        fire = 0;
-		    }
-
-		    if (get_collision(P0, PF) == 1){
-		        sound(2, sound_vol, freq_2, type_2);
-		        sound_duration = 5; 
-		        retries += 1;
-		        vel_y = 0;
-		        pos_x = 0;
-		        pos_y = (SCREEN_Y/2 + field_width) * 50;
-		        jumping = 0;
-		        direction0 = -1.0;
-		        fire = 0;
-		    }
-
-		    if (get_collision(P1, M0) == 1){
-		        direction1 = -direction1;
-		    }
-
-
-		    if (fire0 == true){
-		        fire0 = false;
-		        if (vel_x > 0){
-		            if (jumping == 0){
-		                sound(1, sound_vol, freq_1, type_1);
-		                sound_duration = 5;                     
-		                jumping = 1;
-		                vel_y = 180 * direction0;
-		            }
-		        }
-		        else{
-		            vel_x = 240;
-		        }
-		    }
+		if (game_state == PLAYING){
+			game_state = READY;
+		    sound(1, sound_vol, freq_1, type_1);
+		    sound_duration = 2;     
 		}
-	    requestAnimationFrame(draw);
-	}
 
-	draw();
+
+
+
+	    animation += dt/100.0;
+	    if (animation >= 4.0){
+	        animation = 0.0;
+	        color_p0 = (color_p0 + 1) & 0x7F;
+	    }
+
+	    var a = Math.trunc(animation);
+	    var b = (4 - a) & 0x03;
+
+		screen();
+		background(0, SCREEN_Y, color_bk1);
+		background(21 + game_number*7, 7, color_bk2);
+		print_small(2, 1, '    ATARI 2600 GAMES IN JAVASCRIPT     ', color_bk2);
+		print_small(2, 8, '    USE ARROWS AND ENTER TO SELECT     ', color_bk2);
+		print_small(2, 15,'   --------------------------------    ', color_p0);		
+
+		var color_list = 0;
+		for (var i = 0; i < 12; i++){ 
+			color_list = color_bk2;
+			if (i == game_number){
+				color_list = color_bk1;
+			}
+			print_small(2, 22 + i*7, game_list[i], color_list);
+		}
+
+		player1(14, 21 + game_number*7, pman.slice((a*7),(a*7)+7), color_bk1);
+		player1(135, 21 + game_number*7, pman.slice((b*7),(b*7)+7), color_bk1);
+
+		requestAnimationFrame(draw);
+}
+
+
+
+	draw();	
 </script>
 
-</body>
+
+  </body>
 </html>
