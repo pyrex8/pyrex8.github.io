@@ -1111,7 +1111,7 @@ var blocky =
 	var game_state = READY;
 	var spacePressed = false;
 
-	var field_width = 12;
+	var field_width = 24;
 	var NUM_LEVELS = 30;
 
 	var color_p0 = 2 + (8 * 3);
@@ -1125,7 +1125,7 @@ var blocky =
 	var fire0 = false;
 
 	var anamation = 0.0;
-	var nemesis_y = 42.0;
+	var nemesis_y = 84.0;
 	var direction1 = -1.0;
 	var fire = 0;
 	var fire_x = 0;
@@ -1229,8 +1229,8 @@ var blocky =
 
 
 	    if (game_state == PAUSED){  
-	        print_large(2, 2+76, '   GAME', color_p0);
-	        print_large(2, 2+84, '  PAUSED', color_p0);
+	        print_large(2, 4+152, '   GAME', 2, color_p0);
+	        print_large(2, 4+168, '  PAUSED', 2, color_p0);
 	    }
 	    else
 	   	{
@@ -1248,25 +1248,25 @@ var blocky =
 		    var d = Math.trunc(fire_x/50)
 
 		    if ((level_number < NUM_LEVELS) && (vel_x > 0)){
-		        nemesis_y += direction1 * dt/100.0; 
+		        nemesis_y += direction1 * dt/50.0; 
 		        missile1(d, fire_y + 6, 1, 1, color_p1);
 		    }
 
 
-		    if (nemesis_y < (SCREEN_Y/2 - field_width) - 4){
-		        nemesis_y = 42.0;
+		    if (nemesis_y < (SCREEN_Y/2 - field_width) - 8){
+		        nemesis_y = 84.0;
 		    }
 
-		    if (nemesis_y > (SCREEN_Y/2 + field_width) + 4){
-		        nemesis_y = 42.0;
+		    if (nemesis_y > (SCREEN_Y/2 + field_width) + 8){
+		        nemesis_y = 84.0;
 		    }
 
 		    pos_x += vel_x * dt/50.0;
 		    pos_y += vel_y * dt/50.0;
 
-		    if (pos_y > (SCREEN_Y/2 + field_width) * 50){
+		    if (pos_y > (SCREEN_Y/2 + field_width - height0) * 50){
 		        vel_y = 0;
-		        pos_y = (SCREEN_Y/2 + field_width) * 50;
+		        pos_y = (SCREEN_Y/2 + field_width - height0) * 50;
 		        jumping = 0;
 		        direction0 = -1.0;
 		    }
@@ -1300,13 +1300,13 @@ var blocky =
 		        pos_y = (SCREEN_Y/2 + 2) * 50;
 		    }
 
-		    player0(Math.trunc(pos_x/50), Math.trunc(pos_y/50)-4, blocky, color_p0);
+		    player0(Math.trunc(pos_x/50), Math.trunc(pos_y/50)-4, blocky, 2, color_p0);
 
 	    	var a = Math.trunc(anamation);
 		    var b = level_number - 1;
 		    c =  Math.trunc(nemesis_y)
 		    for (var i = 0; i < 6; i++){ 
-		        playfield(40 + 4*i, 4, level[i+6*b], color_pf);
+		        playfield(80 + 8*i, 8, level[i+6*b], color_pf);
 		    }
 
 		    if (direction1 < 0){
@@ -1331,16 +1331,16 @@ var blocky =
 		        fire = 0;
 		    }
 
-		    player1(152, c, nemesis.slice((b*24)+(a*12),(b*24)+(a*12)+12), color_p1);
+		    player1(152, c, nemesis.slice((b*24)+(a*12),(b*24)+(a*12)+12), 2, color_p1);
 
 		    if (retries > 999){
 		        retries = 999;
 		    }
 
-		    number(9, 2, retries, color_p0);
-		    number(24, 2, level_number, color_p0);
+		    number(9, 2, retries, 2, color_p0);
+		    number(24, 2, level_number, 2, color_p0);
 
-		    print_large(28, 2, '-30', color_p0);
+		    print_large(28, 2, '-30', 2, color_p0);
 
 		    //# Start screen
 		    if (game_state == READY){
@@ -1348,9 +1348,9 @@ var blocky =
 		        vel_x = 0;
 		        vel_y = 0;
 		        pos_x = 0 ;
-		        pos_y = (SCREEN_Y/2 + field_width) * 50 ;
-		        print_large(2, 2+16, '  SELECT', color_p0);
-		        print_large(2, 2+24, ' TO START', color_p0);
+		        pos_y = (SCREEN_Y/2 + field_width - height0) * 50 ;
+		        print_large(2, 4+32, '  SELECT', 2, color_p0);
+		        print_large(2, 4+48, ' TO START', 2, color_p0);
 		    }
 
 		    //# End SCREEN
@@ -1359,12 +1359,12 @@ var blocky =
 		        vel_x = 0;
 		        vel_y = 0;
 		        pos_x = 0;
-		        pos_y = (SCREEN_Y/2 + field_width) * 50 ;   
-		        print_large(2, 2+16, '   YOU', color_p0);
-		        print_large(2, 2+24, ' DID IT!', color_p0);
+		        pos_y = (SCREEN_Y/2 + field_width - height0) * 50 ;   
+		        print_large(2, 4+32, '   YOU', 2, color_p0);
+		        print_large(2, 4+48, ' DID IT!', 2, color_p0);
 
-		        print_large(3, 2+76, 'USE PAUSE', color_p0);
-		        print_large(1, 2+84, 'TO RESTART', color_p0);
+		        print_large(3, 4+76, 'USE PAUSE', 2, color_p0);
+		        print_large(1, 4+84, 'TO RESTART', 2, color_p0);
 		    }
 
 	        if (get_collision(P0, P1) == 1){
@@ -1419,7 +1419,7 @@ var blocky =
 		                sound(1, sound_vol, freq_1, type_1);
 		                sound_duration = 5;                     
 		                jumping = 1;
-		                vel_y = 180 * direction0;
+		                vel_y = 360 * direction0;
 		            }
 		        }
 		        else{
