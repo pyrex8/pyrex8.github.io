@@ -1,20 +1,24 @@
+// From Stella running color.bin in Ubuntu using Gpick
+
 var colorsHex = [
- '#000000','#404040','#6C6C6C','#909090','#B0B0B0','#C8C8C8','#DCDCDC','#ECECEC'
-,'#444400','#646410','#848424','#A0A034','#B8B840','#D0D050','#E8E85C','#FCFC68'
-,'#702800','#844414','#985C28','#AC783C','#BC8C4C','#CCA05C','#DCB468','#ECC878'
-,'#841800','#983418','#AC5030','#C06848','#D0805C','#E09470','#ECA880','#FCBC94'
-,'#880000','#9C2020','#B03C3C','#C05858','#D07070','#E08888','#ECA0A0','#FCB4B4'
-,'#78005C','#8C2074','#A03C88','#B0589C','#C070B0','#D084C0','#DC9CD0','#ECB0E0'
-,'#480078','#602090','#783CA4','#8C58B8','#A070CC','#B484DC','#C49CEC','#D4B0FC'
-,'#140084','#302098','#4C3CAC','#6858C0','#7C70D0','#9488E0','#A8A0EC','#BCB4FC'
-,'#000088','#1C209C','#3840B0','#505CC0','#6874D0','#7C8CE0','#90A4EC','#A4B8FC'
-,'#00187C','#1C3890','#3854A8','#5070BC','#6888CC','#7C9CDC','#90B4EC','#A4C8FC'
-,'#002C5C','#1C4C78','#386890','#5084AC','#689CC0','#7CB4D4','#90CCE8','#A4E0FC'
-,'#003C2C','#1C5C48','#387C64','#509C80','#68B494','#7CD0AC','#90E4C0','#A4FCD4'
-,'#003C00','#205C20','#407C40','#5C9C5C','#74B474','#8CD08C','#A4E4A4','#B8FCB8'
-,'#143800','#345C1C','#507C38','#6C9850','#84B468','#9CCC7C','#B4E490','#C8FCA4'
-,'#2C3000','#4C501C','#687034','#848C4C','#9CA864','#B4C078','#CCD488','#E0EC9C'
-,'#442800','#644818','#846830','#A08444','#B89C58','#D0B46C','#E8CC7C','#FCE08C'];
+ '#000000','#4B4B4B','#6F6F6F','#8D8D8D','#A9A9A9','#BFBFBF','#D5D5D5','#EBEBEB'
+,'#4A4913','#696822','#85842E','#A19F3B','#BAB846','#D1CF51','#E8E55C','#FCFA66'
+,'#7A2F0F','#8E491F','#A0612D','#B2783A','#C18E47','#D0A153','#DEB45E','#EBC569'
+,'#8E210E','#A13B20','#B35331','#C46B41','#D38050','#E1955E','#EFA86C','#FBB979'
+,'#92040C','#A42022','#B53537','#C54A4B','#D45C5D','#E26F6F','#EE7F80','#FB8F8F'
+,'#821162','#942477','#A5378B','#B54B9E','#C35CAF','#D16EBF','#DE7ECE','#EA8DDC'
+,'#501680','#672795','#7B39A8','#8F4CBB','#A15ECB','#B26FDB','#C27FEA','#D18EF8'
+,'#18188B','#35289E','#4E3BB0','#674EC1','#7D61D0','#9272DE','#A682EC','#B992F8'
+,'#00198F','#1B29A2','#2F3CB3','#434FC3','#5461D1','#6472DF','#7482EB','#8292F8'
+,'#002784','#1D4198','#305AAB','#4474BE','#558BCE','#65A0DD','#75B5EC','#84C8F9'
+,'#003562','#1F527D','#326E95','#4588AD','#569FC2','#66B6D6','#76CBE9','#85E0FA'
+,'#0B4234','#216250','#33806A','#479C82','#58B699','#68CFAE','#77E6C2','#86FBD5'
+,'#0C4511','#236527','#38823C','#4C9D50','#5FB763','#72CF75','#82E686','#92FA96'
+,'#1C3E0F','#395E25','#547C37','#6F994B','#87B45C','#9ECD6D','#B4E57D','#C8FA8C'
+,'#343A0F','#515923','#6D7435','#879047','#9FA857','#B6BF67','#CBD576','#E0EA83'
+,'#492F0D','#694E20','#856931','#A08441','#B99C50','#D1B35E','#E7C96B','#FCDE78'];
+
+
 
 // var #!/usr/bin/env python
 //''' 3x5 font http://robey.lag.net/2010/01/23/tiny-monospace-font.html'''
@@ -424,9 +428,9 @@ var font_3x5 =  [
 
 
 var SCREEN_X = 160;
-var SCREEN_Y = 104;
+var SCREEN_Y = 208;
 
-var ZOOM = 4;
+var INTERLACE = 2
 
 var PF_PIXEL = 4;
 
@@ -498,22 +502,23 @@ function sound(snum, svol, sfreq, stype) {
 
 function screen(){
     //"""rescale window"""
-    var p_width = window.innerWidth/SCREEN_X;
-    var p_height = window.innerHeight/SCREEN_Y;
+    var p_width = Math.trunc(window.innerWidth/SCREEN_X/INTERLACE);
+    var p_height = Math.trunc(window.innerHeight/SCREEN_Y);
     if (p_width < p_height){
-        ctx.canvas.width = Math.trunc(p_width)*SCREEN_X;
-        ctx.canvas.height = Math.trunc(p_width)*SCREEN_Y;
+        ctx.canvas.width = p_width*SCREEN_X*INTERLACE;
+        ctx.canvas.height = p_width*SCREEN_Y;
     }
     else{
-        ctx.canvas.width = Math.trunc(p_height)*SCREEN_X;
-        ctx.canvas.height = Math.trunc(p_height)*SCREEN_Y;
+        ctx.canvas.width = p_height*SCREEN_X*INTERLACE;
+        ctx.canvas.height = p_height*SCREEN_Y;
     }
 }
+
 
 function rectangle(x, y, width, height, color){
     //"""draw rectangle with scaling"""
     var pixel_width = canvas.width/SCREEN_X;
-    var pixel_height = canvas.height/SCREEN_Y;
+    var pixel_height = canvas.height/SCREEN_Y
     ctx.beginPath();
 	ctx.rect(x*pixel_width, y*pixel_height, width*pixel_width, height*pixel_height);
 	ctx.fillStyle = colorsHex[color];
@@ -582,7 +587,7 @@ function playfield_collision(x, y){
  }
 
 
-function place_character(x, y, character, color){
+function place_character(x, y, character, pixel_height, color){
     //"""Prints a 3x5 font using Playfield pixels, numbers upper case and some 
     //special characters"""
     var k = '';
@@ -597,25 +602,27 @@ function place_character(x, y, character, color){
         for (var i = 0; i < 3; i++){
         	var l = k.charAt(i);
             if (l == 'X'){
-              rectangle((x+i)*PF_PIXEL, (y+j), PF_PIXEL, 1, color);		
-              playfield_collision((x+i)*PF_PIXEL, y + j);
+                rectangle((x+i)*PF_PIXEL, (y+j*pixel_height), PF_PIXEL, pixel_height, color);	
+                for (var m = 0; m < pixel_height; m++){ 
+                    playfield_collision((x+i)*PF_PIXEL, y + (j*pixel_height) +m);
+                }
             }
         }
     }
 }
 
 
-function print_large(x, y, pstring, color){
+function print_large(x, y, pstring, pixel_height, color){
     //"""Prints a string that is left justified using 3x5 chracters in 
     //Playfield pixels."""
     for (var i = 0; i < pstring.length; i++){
         j = pstring.charAt(i);
-        place_character(x + (i*4), y, j, color);
+        place_character(x + (i*4), y, j, pixel_height, color);
     }
 }
 
 
-function number(x, y, value, color){
+function number(x, y, value, pixel_height, color){
     //"""Prints a numeric value that is right justified using 3x5 digits in 
     //Playfield pixels."""
     if (value < 0){
@@ -624,12 +631,12 @@ function number(x, y, value, color){
     pstring = value.toString();
     for (var i = 0; i < pstring.length; i++){
         j = pstring.charAt(pstring.length - 1 - i);
-        place_character(x - (i*4), y, j, color);
+        place_character(x - (i*4), y, j, pixel_height, color);
     }
 }
 
 
-function place_char(x, y, character, color){
+function place_char(x, y, character, pixel_height, color){
     //"""Prints a 3x5 font using Player pixels, numbers upper case and some 
     //special characters"""
     var k = '';
@@ -644,25 +651,27 @@ function place_char(x, y, character, color){
         for (var i = 0; i < 3; i++){
             var l = k.charAt(i);
             if (l == 'X'){
-                rectangle(x + i, y + j, 1, 1, color);    
-                update_collision(P0, x + i, y + j);
+                rectangle(x + i, y + j*pixel_height, 1, pixel_height, color);   
+                for (var m = 0; m < pixel_height; m++){ 
+                    update_collision(P0, x + i, y + (j*pixel_height) + m);
+                }
             }
         }
     }
 }
 
 
-function print_small(x, y, pstring, color){
+function print_small(x, y, pstring, pixel_height, color){
     //"""Prints a string that is left justified using 3x5 chracters in 
     //Player pixels."""
     for (var i = 0; i < pstring.length; i++){
         j = pstring.charAt(i);
-        place_char(x + (i*4), y, j, color);
+        place_char(x + (i*4), y, j, pixel_height, color);
     }
 }
 
 
-function number_small(x, y, value, color){
+function number_small(x, y, value, pixel_height, color){
     //"""Prints a numeric value that is right justified using 3x5 digits in 
     //Player pixels."""
     if (value < 0){
@@ -671,7 +680,7 @@ function number_small(x, y, value, color){
     pstring = value.toString();
     for (var i = 0; i < pstring.length; i++){
         j = pstring.charAt(pstring.length - 1 - i);
-        place_char(x - (i*4), y, j, color);
+        place_char(x - (i*4), y, j, pixel_height, color);
     }
 }
 
@@ -725,28 +734,32 @@ function missile1(x, y, width, height, color){
 
 
 
-function player0(x, y, data, color){
+function player0(x, y, data, pixel_height, color){
     //"""Player0 drawing and collision detection."""  
     var line_length = data[0].length;
     for (var j = 0; j < data.length; j++){ 
     	for (var i = 0; i < line_length; i++){ 
 	        if (data[j].charAt(i) == 'X'){
-	            rectangle(x + i, y + j, 1, 1, color);    
-	            update_collision(P0, x + i, y + j);
+	            rectangle(x + i, y + j*pixel_height, 1, pixel_height, color); 
+                for (var m = 0; m < pixel_height; m++){ 
+                    update_collision(P0, x + i, y + (j*pixel_height) + m);
+                }
 	        }
 	    }
     }
 }
 
 
-function player1(x, y, data, color){
+function player1(x, y, data, pixel_height, color){
     //"""Player0 drawing and collision detection."""
     var line_length = data[0].length;
     for (var j = 0; j < data.length; j++){ 
     	for (var i = 0; i < line_length; i++){ 
 	        if (data[j].charAt(i) == 'X'){
-	            rectangle(x + i, y + j, 1, 1, color);
-	            update_collision(P1, x + i, y + j);
+	            rectangle(x + i, y + j*pixel_height, 1, pixel_height, color);
+                for (var m = 0; m < pixel_height; m++){ 
+                    update_collision(P1, x + i, y + (j*pixel_height) + m);
+                }
 	        }
 	    }
     }
