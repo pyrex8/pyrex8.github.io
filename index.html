@@ -87,8 +87,8 @@ var game_list = [
 
 	var game_number = 0
 
-	var color_p0 = 2 + (8 * 3);
-	var color_p1 = 15;
+	var color_p0 = 0;
+	var color_p1 = 16;
 	var color_pf = 3 + (8 * 8);
 	var color_bk1 = 76;
 	var color_bk2 = 74;
@@ -182,11 +182,11 @@ var game_list = [
 
 
 
-
+		color_p1 = (color_p1 + 8) & 0x7F;
 	    animation += dt/100.0;
 	    if (animation >= 4.0){
 	        animation = 0.0;
-	        color_p0 = (color_p0 + 1) & 0x7F;
+	        color_p0 = (color_p0 + 8) & 0x78;
 	    }
 
 	    var a = Math.trunc(animation);
@@ -194,10 +194,10 @@ var game_list = [
 
 		screen();
 		background(0, SCREEN_Y, color_bk1);
-		background(21 + game_number*7, 7, color_bk2);
-		print_small(2, 1, '    ATARI 2600 GAMES IN JAVASCRIPT     ', color_bk2);
-		print_small(2, 8, '    USE ARROWS AND ENTER TO SELECT     ', color_bk2);
-		print_small(2, 15,'   --------------------------------    ', color_p0);		
+		background(42 + game_number*14, 14, color_bk2);
+		print_small(2, 2, '    ATARI 2600 GAMES IN JAVASCRIPT     ', 2, color_bk2);
+		print_small(2, 16, '    USE ARROWS AND ENTER TO SELECT     ', 1, color_bk2);
+		print_small(2, 30,'   --------------------------------    ', 2, color_p0);		
 
 		var color_list = 0;
 		for (var i = 0; i < 12; i++){ 
@@ -205,11 +205,15 @@ var game_list = [
 			if (i == game_number){
 				color_list = color_bk1;
 			}
-			print_small(2, 22 + i*7, game_list[i], color_list);
+			print_small(2, 44 + i*14, game_list[i], 2, color_list);
 		}
 
-		player1(14, 21 + game_number*7, pman.slice((a*7),(a*7)+7), color_bk1);
-		player1(135, 21 + game_number*7, pman.slice((b*7),(b*7)+7), color_bk1);
+		for (var i = 0; i < 7; i++){ 
+			player1(14, 42 + game_number*14+(i*2), pman.slice((b*7)+i,(b*7)+i+1), 2, color_p0 + 7 - i);
+		}
+		for (var i = 0; i < 7; i++){ 
+			player1(135, 42 + game_number*14+(i*2), pman.slice((b*7)+i,(b*7)+i+1), 2, color_p1 + i);
+		}		
 
 		requestAnimationFrame(draw);
 }
