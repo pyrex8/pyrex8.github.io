@@ -1349,7 +1349,7 @@ var blocky =
 		        vel_y = 0;
 		        pos_x = 0 ;
 		        pos_y = (SCREEN_Y/2 + field_width - height0) * 50 ;
-		        print_large(2, 4+32, '  SELECT', 2, color_p0);
+		        print_large(2, 4+32, '  READY', 2, color_p0);
 		        print_large(2, 4+48, ' TO START', 2, color_p0);
 		    }
 
@@ -1363,8 +1363,9 @@ var blocky =
 		        print_large(2, 4+32, '   YOU', 2, color_p0);
 		        print_large(2, 4+48, ' DID IT!', 2, color_p0);
 
-		        print_large(3, 4+76, 'USE PAUSE', 2, color_p0);
-		        print_large(1, 4+84, 'TO RESTART', 2, color_p0);
+		        print_large(3, 4+142, 'USE PAUSE', 2, color_p0);
+		        print_large(1, 4+158, '  BUTTON', 2, color_p0);
+                    print_large(1, 4+174, 'TO RESTART', 2, color_p0);
 		    }
 
 	        if (get_collision(P0, P1) == 1){
