@@ -90,6 +90,16 @@ var nemesis =   [
 
                 ];
 
+var plyfd_fill = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
+var tree_leavs = [
+    'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+    'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+    'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+    'XXXXXXXXXXXXXXX  XXXXXXXXXXXXXXXXXXXXXXX'];
+var tree_trunk = 'X........X.......X....X.......X........X';
+
+
+
 
     var TREE_PANT_COLOR = 105;
     var BACKGROUND_COLOR = 107;
@@ -165,7 +175,7 @@ var nem_color = [
     var x = 0;
     var y = 0;
 
-
+    var i =0;
 
 	document.addEventListener('keydown', keyDownHandler, false);
 
@@ -279,32 +289,43 @@ var nem_color = [
 
 		screen();
         background(0, SCREEN_Y, DARKESS_COLOR);
-		background(6, 51, TREE_PANT_COLOR);
+//		background(6, 51, TREE_PANT_COLOR);
 		background(57, 60, BACKGROUND_COLOR);
         background(117, 16, GROUND_COLOR);
         background(133, 15, DIRT_COLOR);
         background(180, 6, DIRT_COLOR);
 
-		print_small(2, 8,  '       PITFALL        ', 2, LETTERING_COLOR)
+
+        // draw tree tops
+        playfield(6, 51, plyfd_fill, TREE_PANT_COLOR);
+        // draw tree leaves
+		for (i = 0; i < 4; i++){
+			playfield(57 + i*2, 2, tree_leavs[i], TREE_PANT_COLOR);
+		}
+
+        // draw tree trunks
+        playfield(62, 55, tree_trunk, TRUNK_COLOR);
+
+		print_small(2, 8,  '       0000        ', 2, LETTERING_COLOR)
 
         var p_width = Math.trunc(window.innerWidth / SCREEN_X / INTERLACE),
         p_height = Math.trunc(window.innerHeight / SCREEN_Y);
 
 
-
 		number_small(2, 16, p_width, 1, LETTERING_COLOR);
         number_small(30, 30, SHIRT_COLOR, 1, LETTERING_COLOR);
 
-		var color_list = 0;
-        ball(30, 62, 4, 55, TRUNK_COLOR);
 
-		for (var i = 0; i < 21; i++){
-			player1(10, 104 + game_number*14+i, nemesis.slice(i,i+1), 1, nem_color.slice(i,i+1));
+
+
+
+		for (i = 0; i < 21; i++){
+			player1(18, 104 + game_number*14+i, nemesis.slice(i,i+1), 1, nem_color[i]);
 //            player1(10, 104 + game_number*14+i, nemesis.slice(i,i+1), 1, SHIRT_COLOR);
 		}
 
 
-        print_small(2, 190,  'ACTIVISION ', 1, LETTERING_COLOR)
+        print_small(2, 190,  'XXX ', 1, LETTERING_COLOR)
 		requestAnimationFrame(draw);
 }
 
