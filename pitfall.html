@@ -92,13 +92,44 @@ var nemesis =   [
 
 var plyfd_fill = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
 var tree_leavs = [
-    'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-    'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-    'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-    'XXXXXXXXXXXXXXX  XXXXXXXXXXXXXXXXXXXXXXX'];
-var tree_trunk = 'X........X.......X....X.......X........X';
+    'XXXXXXXXXXX  XXXXXXXXXXXXXX  XXXXXXXXXXX',
+    'XXXXXXXXXX    XXXXXXXXXXXX    XXXXXXXXXX',
+    'XXX  XXXX      XXXX  XXXX      XXXX  XXX',
+    'XX    XX        XX    XX        XX    XX'];
+var tree_trunk = '.........X.......X....X.......X.........S';
+
+var branch1 =  [
+    '       X',
+    '       X',
+    '   XX  X',
+    '   XX  X',
+    'XX XX XX',
+    ' XXXXXX '];
 
 
+var branch2 =  [
+    '        ',
+    '        ',
+    '        ',
+    '        ',
+    '      XX',
+    ' XXXXXX '];
+
+var branch3 =  [
+    '        ',
+    '        ',
+    '        ',
+    '        ',
+    'XX      ',
+    ' XXXXXX '];
+
+var branch4 =  [
+    'X       ',
+    'X       ',
+    'X  XX   ',
+    'X  XX   ',
+    'XX XX XX',
+    ' XXXXXX '];
 
 
     var TREE_PANT_COLOR = 105;
@@ -296,6 +327,9 @@ var nem_color = [
         background(180, 6, DIRT_COLOR);
 
 
+
+
+
         // draw tree tops
         playfield(6, 51, plyfd_fill, TREE_PANT_COLOR);
         // draw tree leaves
@@ -304,7 +338,7 @@ var nem_color = [
 		}
 
         // draw tree trunks
-        playfield(62, 55, tree_trunk, TRUNK_COLOR);
+        playfield(65, 52, tree_trunk, TRUNK_COLOR);
 
 		print_small(2, 8,  '       0000        ', 2, LETTERING_COLOR)
 
@@ -315,15 +349,14 @@ var nem_color = [
 		number_small(2, 16, p_width, 1, LETTERING_COLOR);
         number_small(30, 30, SHIRT_COLOR, 1, LETTERING_COLOR);
 
-
-
-
-
 		for (i = 0; i < 21; i++){
 			player1(18, 104 + game_number*14+i, nemesis.slice(i,i+1), 1, nem_color[i]);
-//            player1(10, 104 + game_number*14+i, nemesis.slice(i,i+1), 1, SHIRT_COLOR);
 		}
 
+        player1(34, 59, branch1, 1, TRUNK_COLOR);
+        player1(66, 59, branch2, 1, TRUNK_COLOR);
+        player1(86, 59, branch3, 1, TRUNK_COLOR);
+        player1(118, 59, branch4, 1, TRUNK_COLOR);
 
         print_small(2, 190,  'XXX ', 1, LETTERING_COLOR)
 		requestAnimationFrame(draw);
