@@ -1174,7 +1174,7 @@ function keyDownHandler(event) {
             game_state = PLAYING;
         }
     }
-    if ((key === 19) || (key === 179)) {
+    if ((key === 19) || (key === 179) || (key === 80)) {
         if (game_state === PLAYING) {
             onPause();
         } else {
