@@ -323,7 +323,7 @@ function draw() {
     player1(86, 59, branch3, 1, TRUNK_COLOR);
     player1(118, 59, branch4, 1, TRUNK_COLOR);
 
-    print_small(12, 190, 'ABC ', 1, LETTERING_COLOR);
+    print_small(12, 190, 'WORK IN PROGRESS ', 1, LETTERING_COLOR);
 
     ball(0, 0, 8, SCREEN_Y, DARKESS_COLOR);
 

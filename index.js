@@ -46,7 +46,7 @@ var pman = [
 
 var game_list = [
     '         BLOCK THE KNIGHT              ',
-    '         ------                        ',
+    '         PITFALL                       ',
     '         ------                        ',
     '         ------                        ',
     '         ------                        ',
@@ -131,8 +131,12 @@ function keyDownHandler(event) {
         }
     }
     if ((key === 13) || (key === 32)) {
-        location.href = "https://pyrex8.github.io/block_the_knight.html";
-
+        if (game_number === 0) {
+            location.href = "https://pyrex8.github.io/block_the_knight.html";
+        }
+        if (game_number === 1) {
+            location.href = "https://pyrex8.github.io/pitfall.html";
+        }
     }
 
 }
