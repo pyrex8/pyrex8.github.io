@@ -632,7 +632,7 @@ function print_large(x, y, pstring, pixel_height, color) {
 }
 
 
-function number(x, y, value, pixel_height, color) {
+function number_large(x, y, value, pixel_height, color) {
     //"""Prints a numeric value that is right justified using 3x5 digits in 
     //Playfield pixels."""
     var i,
