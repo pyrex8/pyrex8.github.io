@@ -267,6 +267,110 @@ var brick2 = ['X XXX X '];
 var mortar = ['XXXXXXX '];
 
 
+//# starts at ASCII - 0
+var font_8x8 = [
+
+    '  XXXX  ',
+    ' XX  XX ',
+    ' XX  XX ',
+    ' XX  XX ',
+    ' XX  XX ',
+    ' XX  XX ',
+    ' XX  XX ',
+    '  XXXX  ',
+
+    '   XX   ',
+    '  XXX   ',
+    '   XX   ',
+    '   XX   ',
+    '   XX   ',
+    '   XX   ',
+    '   XX   ',
+    '  XXXX  ',
+
+    '  XXXX  ',
+    ' X   XX ',
+    '     XX ',
+    '     XX ',
+    '  XXXX  ',
+    ' XX     ',
+    ' XX     ',
+    ' XXXXXX ',
+
+    '  XXXX  ',
+    ' X   XX ',
+    '     XX ',
+    '    XX  ',
+    '    XX  ',
+    '     XX ',
+    ' X   XX ',
+    '  XXXX  ',
+
+    '    XX  ',
+    '   XXX  ',
+    '  X XX  ',
+    ' X  XX  ',
+    ' XXXXXX ',
+    '    XX  ',
+    '    XX  ',
+    '    XX  ',
+
+    ' XXXXXX ',
+    ' XX     ',
+    ' XX     ',
+    ' XXXXX  ',
+    '     XX ',
+    '     XX ',
+    ' X   XX ',
+    ' XXXXX  ',
+
+    '  XXXX  ',
+    ' XX   X ',
+    ' XX     ',
+    ' XXXXX  ',
+    ' XX  XX ',
+    ' XX  XX ',
+    ' XX  XX ',
+    '  XXXX  ',
+
+    ' XXXXXX ',
+    ' X    X ',
+    '     XX ',
+    '    XX  ',
+    '   XX   ',
+    '   XX   ',
+    '   XX   ',
+    '   XX   ',
+
+    '  XXXX  ',
+    ' XX  XX ',
+    ' XX  XX ',
+    '  XXXX  ',
+    '  XXXX  ',
+    ' XX  XX ',
+    ' XX  XX ',
+    '  XXXX  ',
+
+    '  XXXX  ',
+    ' XX  XX ',
+    ' XX  XX ',
+    ' XX  XX ',
+    '  XXXXX ',
+    '     XX ',
+    ' X   XX ',
+    '  XXXX  ',
+
+    '        '];
+
+
+
+
+
+
+
+
+
+
 var TREE_PANT_COLOR = 105;
 var BACKGROUND_COLOR = 107;
 
@@ -481,8 +585,6 @@ function draw() {
 
     playfield(180, 6, plyfd_fill, DIRT_COLOR);
 
-    print_small(2, 8, '       2000        ', 2, LETTERING_COLOR);
-
     player1(124, 118, log_roll, 1, HAIR_LOG_COLOR);
 
     for (i = 0; i < 21; i += 1) {
@@ -501,6 +603,10 @@ function draw() {
     print_small(12, 190, 'WORK IN PROGRESS ', 1, LETTERING_COLOR);
 
     ball(0, 0, 8, SCREEN_Y, DARKESS_COLOR);
+
+    for (i = 0; i < 10; i += 1) {
+        player1(36 + i * 8, 10, font_8x8.slice(i * 8, i * 8 + 8), 1, LETTERING_COLOR);
+    }
 
     requestAnimationFrame(draw);
 }
