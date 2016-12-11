@@ -363,12 +363,49 @@ var font_8x8 = [
     '        '];
 
 
+var activison1 = [
 
+    '        ',
+    '    XXXX',
+    ' X     X',
+    'XXX XX X',
+    'X X X  X',
+    'XXX X  X',
+    'X X X  X',
+    'X X XX X'];
 
+var activison2 = [
 
+    '        ',
+    'XXXX    ',
+    '   X   X',
+    ' X X  XX',
+    ' X X XX ',
+    ' X XXX  ',
+    ' X XX   ',
+    ' X X    '];
 
+var activison3 = [
 
+    '        ',
+    'XXXXXXX ',
+    'X       ',
+    '  XXX X ',
+    'X X   X ',
+    'X XXX X ',
+    'X   X X ',
+    'X XXX X '];
 
+var activison4 = [
+
+    '        ',
+    '        ',
+    '        ',
+    'XXX X  X',
+    'X X XX X',
+    'X X XXXX',
+    'X X X XX',
+    'XXX X  X'];
 
 
 var TREE_PANT_COLOR = 105;
@@ -600,13 +637,16 @@ function draw() {
     player1(86, 59, branch3, 1, TRUNK_COLOR);
     player1(118, 59, branch4, 1, TRUNK_COLOR);
 
-    print_small(12, 190, 'WORK IN PROGRESS ', 1, LETTERING_COLOR);
-
     ball(0, 0, 8, SCREEN_Y, DARKESS_COLOR);
 
     for (i = 0; i < 10; i += 1) {
         player1(36 + i * 8, 10, font_8x8.slice(i * 8, i * 8 + 8), 1, LETTERING_COLOR);
     }
+    i = 29;
+    player1(i, 189, activison1, 1, LETTERING_COLOR);
+    player1(i + 8, 189, activison2, 1, LETTERING_COLOR);
+    player1(i + 16, 189, activison3, 1, LETTERING_COLOR);
+    player1(i + 24, 189, activison4, 1, LETTERING_COLOR);
 
     requestAnimationFrame(draw);
 }
