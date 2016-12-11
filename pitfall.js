@@ -1,4 +1,4 @@
-/*global myCanvas, keyDownHandler,  SCREEN_X, SCREEN_Y, INTERLACE, sound, screen, background, print_small, playfield, player1, ball, requestAnimationFrame*/
+/*global myCanvas, keyDownHandler, tapDownHandler,  SCREEN_X, SCREEN_Y, INTERLACE, PF, BL, P0, P1, M0, M1, sound, screen, reset_collision, get_collision, background, print_large, print_small, number_large, number_small, playfield, player0, player1, ball, missile0, missile1, requestAnimationFrame*/
 /*jslint node: true */
 /*jslint bitwise: true*/
 'use strict';
@@ -33,28 +33,156 @@ var blocky = [
     'XXXX    '];
 
 
-var nemesis = [
-    'XX      ',
-    'XX      ',
-    'XX      ',
+var harry = [
+
+
+    '   XX   ',
+    '   XX   ',
+    '   XX   ',
+    '   X    ',
+    '   XX   ',
+    '   XX   ',
+    '   XX X ',
+    '   XXXX ',
+    '   XXX  ',
+    '   XX   ',
+    '   XX   ',
+    '   XX   ',
+    '   XX   ',
+    '   XX   ',
+    '   XX   ',
+    '   XX   ',
+    '   XX   ',
+    '   XX   ',
+    '   XXX  ',
+    '   X    ',
+    '   XX   ',
+
+
+
+
+
+
+    '   XX   ',
+    '   XX   ',
+    '   XX   ',
+    '   X    ',
+    '   XX   ',
+    '   XX   ',
+    '  XXX X ',
+    '  XXXXX ',
+    '  XXXX  ',
+    '  XXX   ',
+    '   XX   ',
+    '   XX   ',
+    '   XX   ',
+    '   XXX  ',
+    '   XXX  ',
+    '   X X  ',
+    '   X X  ',
+    ' XXX X  ',
+    ' X    XX',
+    ' X    X ',
+    '        ',
+
+
+    '   XX   ',
+    '   XX   ',
+    '   XX   ',
+    '   X    ',
+    '   XX   ',
+    '   XX   ',
+    '   XX   ',
+    '   XX   ',
+    '   XX   ',
+    '   XXX  ',
+    '   XXX  ',
+    '   XX   ',
+    '   XX   ',
+    '   XXX  ',
+    '    XXX ',
+    '    X X ',
+    '  XXXXX ',
+    '  X X   ',
+    '  X X   ',
+    '    X   ',
+    '    XX  ',
+
+
+
+    '   XX   ',
+    '   XX   ',
+    '   XX   ',
+    '   X    ',
+    '   XX   ',
+    '   XX   ',
+    '   XX   ',
+    '   XX   ',
+    '   XXX  ',
+    '   XXX  ',
+    '   XX   ',
+    '   XX   ',
+    '   XXX  ',
+    '   XXXX ',
+    '   X XX ',
+    '   X  X ',
+    '  XX X  ',
+    '  XX X  ',
+    '  X   X ',
+    '  X     ',
+    '   X    ',
+
+    '   XX   ',
+    '   XX   ',
+    '   XX   ',
+    '   X    ',
+    '   XX   ',
+    '   XX   ',
+    '  XXX X ',
+    '  XXXXX ',
+    '  XXXX  ',
+    '  XXX   ',
+    '   XX   ',
+    '   XX   ',
+    '   XXX  ',
+    '  XXXXX ',
+    '  XX XX ',
+    ' XX   X ',
+    ' XX   X ',
+    'XX    XX',
     'X       ',
-    'XX      ',
-    'XX      ',
-    'XX X    ',
-    'XXXX    ',
-    'XXX     ',
-    'XX      ',
-    'XX      ',
-    'XX      ',
-    'XX      ',
-    'XX      ',
-    'XX      ',
-    'XX      ',
-    'XX      ',
-    'XX      ',
-    'XXX     ',
     'X       ',
-    'XX      ',
+    '        ',
+
+    '   XX   ',
+    '   XX   ',
+    '   XX   ',
+    '   X    ',
+    '   XX   ',
+    '   XX   ',
+    '  XXX X ',
+    ' XXXXXX ',
+    ' X XXX  ',
+    ' X XX   ',
+    '   XX   ',
+    '   XXX  ',
+    '   XXX  ',
+    '   XXXX ',
+    'XX XX X ',
+    ' XXX  X ',
+    '  XX  XX',
+    '        ',
+    '        ',
+    '        ',
+    '        ',
+
+
+
+
+
+
+
+
 
 
 
@@ -80,7 +208,9 @@ var tree_leavs = [
     'XXXXXXXXXX    XXXXXXXXXXXX    XXXXXXXXXX',
     'XXX  XXXX      XXXX  XXXX      XXXX  XXX',
     'XX    XX        XX    XX        XX    XX'];
-var tree_trunk = '.........X.......X....X.......X.........S';
+var tree_trunk = '.........X.......X....X.......X.........';
+
+var grnd_open =  'XXXXXXXXXXXXXXXXXXX..XXXXXXXXXXXXXXXXXXX';
 
 var branch1 = [
     '       X',
@@ -114,6 +244,26 @@ var branch4 = [
     'X  XX   ',
     'XX XX XX',
     ' XXXXXX '];
+
+
+var log_roll = [
+    '   XX   ',
+    '  XXXX  ',
+    ' XXX XX ',
+    ' X XXXX ',
+    ' XXXXXX ',
+    ' XXX XX ',
+    ' X XXXX ',
+    ' XXXXXX ',
+    ' XX  XX ',
+    ' X XX X ',
+    ' X XX X ',
+    ' X XX X ',
+    '  X  X  ',
+    '   XX   '];
+
+
+
 
 
 var TREE_PANT_COLOR = 105;
@@ -186,7 +336,7 @@ var freq_2 = 44;
 var type_1 = 'square';
 var type_2 = 'square';
 
-var x = 0;
+var x = 100;
 var y = 0;
 
 var i = 0;
@@ -239,14 +389,14 @@ function keyDownHandler(event) {
         if (x > 0) {
             x -= 1;
         } else {
-            x = 7;
+            x = 160;
         }
     }
     if (key === 39) {
         //right arrow
 
 
-        if (x < 7) {
+        if (x < 160) {
             x += 1;
         } else {
             x = 0;
@@ -286,8 +436,8 @@ function draw() {
     }
 
     color_p1 = (color_p1 + 8) & 0x7F;
-    animation += dt / 100.0;
-    if (animation >= 4.0) {
+    animation += dt / 30.0;
+    if (animation >= 5.0) {
         animation = 0.0;
         color_p0 = (color_p0 + 8) & 0x78;
     }
@@ -296,11 +446,7 @@ function draw() {
 
     screen();
     background(0, SCREEN_Y, DARKESS_COLOR);
-    //		background(6, 51, TREE_PANT_COLOR);
     background(57, 60, BACKGROUND_COLOR);
-    background(117, 16, GROUND_COLOR);
-    background(133, 15, DIRT_COLOR);
-    background(180, 6, DIRT_COLOR);
 
     // draw tree tops
     playfield(6, 51, plyfd_fill, TREE_PANT_COLOR);
@@ -312,10 +458,30 @@ function draw() {
     // draw tree trunks
     playfield(65, 52, tree_trunk, TRUNK_COLOR);
 
+
+    playfield(117, 5, plyfd_fill, GROUND_COLOR);
+    playfield(122, 6, grnd_open, GROUND_COLOR);
+    playfield(128, 5, plyfd_fill, GROUND_COLOR);
+
+    playfield(133, 15, grnd_open, DIRT_COLOR);
+
+    for (i = 0; i < 11; i += 1) {
+        ball(78, 136 + i * 4, 4, 2, DIRT_COLOR);
+    }
+    ball(78, 136, 4, 2, DIRT_COLOR);
+
+    playfield(180, 6, plyfd_fill, DIRT_COLOR);
+
     print_small(2, 8, '       2000        ', 2, LETTERING_COLOR);
 
+    player0(124, 118, log_roll, 1, HAIR_LOG_COLOR);
+
     for (i = 0; i < 21; i += 1) {
-        player1(18, 104 + game_number * 14 + i, nemesis.slice(i, i + 1), 1, nem_color[i]);
+        player1(16, 104 + i, harry.slice(i, i + 1), 1, nem_color[i]);
+    }
+
+    for (i = 0; i < 21; i += 1) {
+        player1(9 + x, 159 + i, harry.slice(i + (a + 1) * 21, i + (a + 1) * 21 + 1), 1, nem_color[i]);
     }
 
     player1(34, 59, branch1, 1, TRUNK_COLOR);
