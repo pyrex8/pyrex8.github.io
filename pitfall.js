@@ -262,8 +262,9 @@ var log_roll = [
     '  X  X  ',
     '   XX   '];
 
-
-
+var brick1 = ['XXX XXX '];
+var brick2 = ['X XXX X '];
+var mortar = ['XXXXXXX '];
 
 
 var TREE_PANT_COLOR = 105;
@@ -465,24 +466,32 @@ function draw() {
 
     playfield(133, 15, grnd_open, DIRT_COLOR);
 
+    // ladder
     for (i = 0; i < 11; i += 1) {
         ball(78, 136 + i * 4, 4, 2, DIRT_COLOR);
     }
-    ball(78, 136, 4, 2, DIRT_COLOR);
+
+//    brick1, brick2, mortar BRICK_COLOR, MORTAR_COLOR
+    for (i = 0; i < 4; i += 1) {
+        player1(136, 148 + i * 8, brick1, 3, BRICK_COLOR);
+        player1(136, 151 + i * 8, mortar, 1, MORTAR_COLOR);
+        player1(136, 152 + i * 8, brick2, 3, BRICK_COLOR);
+        player1(136, 155 + i * 8, mortar, 1, MORTAR_COLOR);
+    }
 
     playfield(180, 6, plyfd_fill, DIRT_COLOR);
 
     print_small(2, 8, '       2000        ', 2, LETTERING_COLOR);
 
-    player0(124, 118, log_roll, 1, HAIR_LOG_COLOR);
+    player1(124, 118, log_roll, 1, HAIR_LOG_COLOR);
 
     for (i = 0; i < 21; i += 1) {
-        player1(16, 104 + i, harry.slice(i, i + 1), 1, nem_color[i]);
+        player0(16, 104 + i, harry.slice(i, i + 1), 1, nem_color[i]);
     }
 
-    for (i = 0; i < 21; i += 1) {
-        player1(9 + x, 159 + i, harry.slice(i + (a + 1) * 21, i + (a + 1) * 21 + 1), 1, nem_color[i]);
-    }
+ //   for (i = 0; i < 21; i += 1) {
+ //       player0(9 + x, 159 + i, harry.slice(i + (a + 1) * 21, i + (a + 1) * 21 + 1), 1, nem_color[i]);
+ //   }
 
     player1(34, 59, branch1, 1, TRUNK_COLOR);
     player1(66, 59, branch2, 1, TRUNK_COLOR);
