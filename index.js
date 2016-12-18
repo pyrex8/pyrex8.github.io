@@ -197,10 +197,10 @@ function draw() {
     }
 
     for (i = 0; i < 7; i += 1) {
-        player1(14, 42 + game_number * 14 + (i * 2), pman.slice((b * 7) + i, (b * 7) + i + 1), 2, color_p0 + 7 - i);
+        player1(14, 42 + game_number * 14 + (i * 2), pman.slice((b * 7) + i, (b * 7) + i + 1), 1, 2, 0, color_p0 + 7 - i);
     }
     for (i = 0; i < 7; i += 1) {
-        player1(135, 42 + game_number * 14 + (i * 2), pman.slice((b * 7) + i, (b * 7) + i + 1), 2, color_p1 + i);
+        player1(135, 42 + game_number * 14 + (i * 2), pman.slice((b * 7) + i, (b * 7) + i + 1), 1, 2, 0, color_p1 + i);
     }
 
     requestAnimationFrame(draw);

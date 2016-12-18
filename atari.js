@@ -761,18 +761,21 @@ function missile1(x, y, width, height, color) {
 
 
 
-function player0(x, y, data, pixel_height, color) {
+function player0(x, y, data, pixel_width, pixel_height, mirror, color) {
     //"""Player0 drawing and collision detection."""  
     var i,
         j,
         m,
+        n,
         line_length = data[0].length;
     for (j = 0; j < data.length; j += 1) {
         for (i = 0; i < line_length; i += 1) {
-	        if (data[j].charAt(i) === 'X') {
-	            rectangle(x + i, y + j * pixel_height, 1, pixel_height, color);
-                for (m = 0; m < pixel_height; m += 1) {
-                    update_collision(P0, x + i, y + (j * pixel_height) + m);
+	        if (data[j].charAt(((line_length - 1) * mirror) + (1 - 2 * mirror) * i) === 'X') {
+                rectangle(x + i * pixel_width, y + j * pixel_height, pixel_width, pixel_height, color);
+                for (n = 0; n < pixel_width; n += 1) {
+                    for (m = 0; m < pixel_height; m += 1) {
+                        update_collision(P0, x + (i * pixel_width) + n, y + (j * pixel_height) + m);
+                    }
                 }
 	        }
 	    }
@@ -780,18 +783,21 @@ function player0(x, y, data, pixel_height, color) {
 }
 
 
-function player1(x, y, data, pixel_height, color) {
-    //"""Player0 drawing and collision detection."""
+function player1(x, y, data, pixel_width, pixel_height, mirror, color) {
+    //"""Player1 drawing and collision detection."""
     var i,
         j,
         m,
+        n,
         line_length = data[0].length;
     for (j = 0; j < data.length; j += 1) {
         for (i = 0; i < line_length; i += 1) {
-	        if (data[j].charAt(i) === 'X') {
-	            rectangle(x + i, y + j * pixel_height, 1, pixel_height, color);
-                for (m = 0; m < pixel_height; m += gain1) {
-                    update_collision(P1, x + i, y + (j * pixel_height) + m);
+	        if (data[j].charAt(((line_length - 1) * mirror) + (1 - 2 * mirror) * i) === 'X') {
+                rectangle(x + i * pixel_width, y + j * pixel_height, pixel_width, pixel_height, color);
+                for (n = 0; n < pixel_width; n += 1) {
+                    for (m = 0; m < pixel_height; m += 1) {
+                        update_collision(P1, x + (i * pixel_width) + n, y + (j * pixel_height) + m);
+                    }
                 }
 	        }
 	    }

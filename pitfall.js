@@ -366,24 +366,24 @@ var font_8x8 = [
 var activison1 = [
 
     '        ',
-    '    XXXX',
-    ' X     X',
-    'XXX XX X',
-    'X X X  X',
-    'XXX X  X',
-    'X X X  X',
-    'X X XX X'];
+    'XXXXXXXX',
+    '  X     ',
+    '  X XXX ',
+    '  X X   ',
+    '  X XXX ',
+    'X X   X ',
+    'XXX XXX '];
 
 var activison2 = [
 
     '        ',
     'XXXX    ',
     '   X   X',
-    ' X X  XX',
-    ' X X XX ',
-    ' X XXX  ',
-    ' X XX   ',
-    ' X X    '];
+    '   X  XX',
+    '   X XX ',
+    '   XXX  ',
+    '   XX   ',
+    '   X    '];
 
 var activison3 = [
 
@@ -462,6 +462,10 @@ var game_state = READY;
 
 var animation = 0.0;
 
+var jumping = 0;
+var running = 0;
+var direction = 0;
+
 var game_number = 0;
 
 var color_p0 = 0;
@@ -528,26 +532,32 @@ function keyDownHandler(event) {
 
     if (key === 37) {
         //left arrow
-        if (x > 0) {
-            x -= 1;
-        } else {
-            x = 160;
-        }
+        direction = 1;
+//        if (x > 0) {
+//            x -= 1;
+//        } else {
+//            x = 160;
+//        }
     }
     if (key === 39) {
         //right arrow
-
-
-        if (x < 160) {
-            x += 1;
-        } else {
-            x = 0;
-        }
+        direction = 0;
+//        running += 1;
+//        if (running > 5) {
+//            running = 1;
+//        }
+//        if (x < 160) {
+//            x += 1;
+//        } else {
+//            x = 0;
+//        }
     }
 
 
     if ((key === 13) || (key === 32)) {
-        x = 0;
+        if (jumping === 0) {
+            jumping = 1;
+        }
     }
 }
 
@@ -614,39 +624,39 @@ function draw() {
 
 //    brick1, brick2, mortar BRICK_COLOR, MORTAR_COLOR
     for (i = 0; i < 4; i += 1) {
-        player1(136, 148 + i * 8, brick1, 3, BRICK_COLOR);
-        player1(136, 151 + i * 8, mortar, 1, MORTAR_COLOR);
-        player1(136, 152 + i * 8, brick2, 3, BRICK_COLOR);
-        player1(136, 155 + i * 8, mortar, 1, MORTAR_COLOR);
+        player1(136, 148 + i * 8, brick1, 1, 3, 0, BRICK_COLOR);
+        player1(136, 151 + i * 8, mortar, 1, 1, 0, MORTAR_COLOR);
+        player1(136, 152 + i * 8, brick2, 1, 3, 0, BRICK_COLOR);
+        player1(136, 155 + i * 8, mortar, 1, 1, 0, MORTAR_COLOR);
     }
 
     playfield(180, 6, plyfd_fill, DIRT_COLOR);
 
-    player1(124, 118, log_roll, 1, HAIR_LOG_COLOR);
+    player1(124, 118, log_roll, 1, 1, 0, HAIR_LOG_COLOR);
 
     for (i = 0; i < 21; i += 1) {
-        player0(16, 104 + i, harry.slice(i, i + 1), 1, nem_color[i]);
+        player0(x, 104 + i, harry.slice(i + running * 21, i + running * 21 + 1), 1, 1, direction, nem_color[i]);
     }
 
  //   for (i = 0; i < 21; i += 1) {
- //       player0(9 + x, 159 + i, harry.slice(i + (a + 1) * 21, i + (a + 1) * 21 + 1), 1, nem_color[i]);
+ //       player0(9 + x, 159 + i, harry.slice(i + (a + 1) * 21, i + (a + 1) * 21 + 1), 1, 1, 0, nem_color[i]);
  //   }
 
-    player1(34, 59, branch1, 1, TRUNK_COLOR);
-    player1(66, 59, branch2, 1, TRUNK_COLOR);
-    player1(86, 59, branch3, 1, TRUNK_COLOR);
-    player1(118, 59, branch4, 1, TRUNK_COLOR);
+    player1(34, 59, branch1, 1, 1, 0, TRUNK_COLOR);
+    player1(66, 59, branch2, 1, 1, 0, TRUNK_COLOR);
+    player1(86, 59, branch3, 1, 1, 0, TRUNK_COLOR);
+    player1(118, 59, branch4, 1, 1, 0, TRUNK_COLOR);
 
     ball(0, 0, 8, SCREEN_Y, DARKESS_COLOR);
 
     for (i = 0; i < 10; i += 1) {
-        player1(36 + i * 8, 10, font_8x8.slice(i * 8, i * 8 + 8), 1, LETTERING_COLOR);
+        player1(36 + i * 8, 10, font_8x8.slice(i * 8, i * 8 + 8), 1, 1, 0, LETTERING_COLOR);
     }
     i = 29;
-    player1(i, 189, activison1, 1, LETTERING_COLOR);
-    player1(i + 8, 189, activison2, 1, LETTERING_COLOR);
-    player1(i + 16, 189, activison3, 1, LETTERING_COLOR);
-    player1(i + 24, 189, activison4, 1, LETTERING_COLOR);
+    player1(i, 189, activison1, 1, 1, 0, LETTERING_COLOR);
+    player1(i + 8, 189, activison2, 1, 1, 0, LETTERING_COLOR);
+    player1(i + 16, 189, activison3, 1, 1, 0, LETTERING_COLOR);
+    player1(i + 24, 189, activison4, 1, 1, 0, LETTERING_COLOR);
 
     requestAnimationFrame(draw);
 }

@@ -1281,7 +1281,7 @@ function draw() {
             pos_y = (SCREEN_Y / 2 + 2) * 50;
         }
 
-        player0(Math.trunc(pos_x / 50), Math.trunc(pos_y / 50) - 4, blocky, 2, color_p0);
+        player0(Math.trunc(pos_x / 50), Math.trunc(pos_y / 50) - 4, blocky, 1, 2, 0, color_p0);
 
         a = Math.trunc(anamation);
         b = level_number - 1;
@@ -1310,7 +1310,7 @@ function draw() {
             fire = 0;
         }
 
-        player1(152, c, nemesis.slice((b * 24) + (a * 12), (b * 24) + (a * 12) + 12), 2, color_p1);
+        player1(152, c, nemesis.slice((b * 24) + (a * 12), (b * 24) + (a * 12) + 12), 1, 2, 0, color_p1);
 
         if (retries > 999) {
             retries = 999;
