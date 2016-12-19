@@ -363,27 +363,50 @@ var font_8x8 = [
     '        '];
 
 
+var lives = [
+    'X X     ',
+    'X X     ',
+    'X X     ',
+    'X X     ',
+    'X X     ',
+    'X X     ',
+    'X X     ',
+    'X X     '];
+
+
+
+var colon = [
+    '        ',
+    '   XX   ',
+    '   XX   ',
+    '        ',
+    '        ',
+    '   XX   ',
+    '   XX   ',
+    '        '];
+
+
 var activison1 = [
 
     '        ',
-    'XXXXXXXX',
-    '  X     ',
-    '  X XXX ',
-    '  X X   ',
-    '  X XXX ',
-    'X X   X ',
-    'XXX XXX '];
+    '    XXXX',
+    ' X     X',
+    'XXX XX X',
+    'X X X  X',
+    'XXX X  X',
+    'X X X  X',
+    'X X XX X'];
 
 var activison2 = [
 
     '        ',
     'XXXX    ',
     '   X   X',
-    '   X  XX',
-    '   X XX ',
-    '   XXX  ',
-    '   XX   ',
-    '   X    '];
+    ' X X  XX',
+    ' X X XX ',
+    ' X XXX  ',
+    ' X XX   ',
+    ' X X    '];
 
 var activison3 = [
 
@@ -482,7 +505,7 @@ var freq_2 = 44;
 var type_1 = 'square';
 var type_2 = 'square';
 
-var x = 100;
+var x = 16;
 var y = 0;
 
 var i = 0;
@@ -649,9 +672,22 @@ function draw() {
 
     ball(0, 0, 8, SCREEN_Y, DARKESS_COLOR);
 
-    for (i = 0; i < 10; i += 1) {
-        player1(36 + i * 8, 10, font_8x8.slice(i * 8, i * 8 + 8), 1, 1, 0, LETTERING_COLOR);
-    }
+    i = 2;
+    player1(36, 10, font_8x8.slice(i * 8, i * 8 + 8), 1, 1, 0, LETTERING_COLOR);
+    i = 0;
+    player1(36 + 8, 10, font_8x8.slice(i * 8, i * 8 + 8), 1, 1, 0, LETTERING_COLOR);
+    player1(36 + 16, 10, font_8x8.slice(i * 8, i * 8 + 8), 1, 1, 0, LETTERING_COLOR);
+    player1(36 + 24, 10, font_8x8.slice(i * 8, i * 8 + 8), 1, 1, 0, LETTERING_COLOR);
+
+    player1(36 - 16, 22, lives.slice(0, 8), 1, 1, 0, LETTERING_COLOR);
+    i = 2;
+    player1(36 - 8, 22, font_8x8.slice(i * 8, i * 8 + 8), 1, 1, 0, LETTERING_COLOR);
+    i = 0;
+    player1(36, 22, font_8x8.slice(i * 8, i * 8 + 8), 1, 1, 0, LETTERING_COLOR);
+    player1(36 + 8, 22, colon.slice(0, 8), 1, 1, 0, LETTERING_COLOR);
+    player1(36 + 16, 22, font_8x8.slice(i * 8, i * 8 + 8), 1, 1, 0, LETTERING_COLOR);
+    player1(36 + 24, 22, font_8x8.slice(i * 8, i * 8 + 8), 1, 1, 0, LETTERING_COLOR);
+
     i = 29;
     player1(i, 189, activison1, 1, 1, 0, LETTERING_COLOR);
     player1(i + 8, 189, activison2, 1, 1, 0, LETTERING_COLOR);
