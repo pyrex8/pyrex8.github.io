@@ -558,26 +558,13 @@ function keyDownHandler(event) {
     if (key === 37) {
         //left arrow
         direction = 1;
-//        if (x > 0) {
-//            x -= 1;
-//        } else {
-//            x = 160;
-//        }
+        vel_x = -1.3;
     }
     if (key === 39) {
         //right arrow
         direction = 0;
-//        running += 1;
-//        if (running > 5) {
-//            running = 1;
-//        }
-//        if (x < 160) {
-//            x += 1;
-//        } else {
-//            x = 0;
-//        }
+        vel_x = 1.3;
     }
-
 
     if ((key === 13) || (key === 32)) {
         if (jumping === 0) {
@@ -588,8 +575,6 @@ function keyDownHandler(event) {
         }
     }
 }
-
-
 
 function draw() {
     var a,
@@ -623,10 +608,33 @@ function draw() {
         running = 0;
     }
 
+    if (pos_x >= 155) {
+        vel_x = 0;
+        pos_x = 154;
+    }
+
+    if (pos_x <= 5) {
+        vel_x = 0;
+        pos_x = 6;
+    }
+
     pos_x += vel_x;
     vel_y += accel_y * dt / 50.0;
     pos_y += vel_y;
 
+    if (vel_x === 0) {
+        running = 0;
+    } else {
+        if (Math.trunc(pos_x) !== x) {
+            running += 1;
+            if (running > 5) {
+                running = 0;
+            }
+        }
+    }
+
+
+    vel_x = 0;
 
     color_p1 = (color_p1 + 8) & 0x7F;
     animation += dt / 30.0;
@@ -654,7 +662,6 @@ function draw() {
     // draw tree trunks
     playfield(65, 52, tree_trunk, TRUNK_COLOR);
 
-
     playfield(117, 5, plyfd_fill, GROUND_COLOR);
     playfield(122, 6, grnd_open, GROUND_COLOR);
     playfield(128, 5, plyfd_fill, GROUND_COLOR);
@@ -681,10 +688,6 @@ function draw() {
     for (i = 0; i < 21; i += 1) {
         player0(x, y + 104 + i, harry.slice(i + running * 21, i + running * 21 + 1), 1, 1, direction, nem_color[i]);
     }
-
- //   for (i = 0; i < 21; i += 1) {
- //       player0(9 + x, 159 + i, harry.slice(i + (a + 1) * 21, i + (a + 1) * 21 + 1), 1, 1, 0, nem_color[i]);
- //   }
 
     player1(34, 59, branch1, 1, 1, 0, TRUNK_COLOR);
     player1(66, 59, branch2, 1, 1, 0, TRUNK_COLOR);
