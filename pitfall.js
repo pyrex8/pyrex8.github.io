@@ -623,9 +623,11 @@ function draw() {
     pos_y += vel_y;
 
     if (vel_x === 0) {
-        running = 0;
+        if (jumping === 0) {
+            running = 0;
+        }
     } else {
-        if (Math.trunc(pos_x) !== x) {
+        if ((Math.trunc(pos_x) !== x) && (jumping === 0)) {
             running += 1;
             if (running > 5) {
                 running = 0;
@@ -633,8 +635,9 @@ function draw() {
         }
     }
 
-
-    vel_x = 0;
+    if (jumping === 0) {
+        vel_x = 0;
+    }
 
     color_p1 = (color_p1 + 8) & 0x7F;
     animation += dt / 30.0;
