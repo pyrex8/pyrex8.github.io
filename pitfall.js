@@ -583,8 +583,8 @@ function keyDownHandler(event) {
         if (jumping === 0) {
             jumping = 1;
             running = 5;
-            accel_y = 0.60;
-            vel_y = -1.80;
+            accel_y = 2.10;
+            vel_y = -4.00;
         }
     }
 }
