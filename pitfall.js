@@ -508,6 +508,13 @@ var type_2 = 'square';
 var x = 16;
 var y = 0;
 
+var pos_x = 16;
+var pos_y = 0;
+
+var vel_x = 0;
+var vel_y = 0;
+var accel_y = 0;
+
 var i = 0;
 
 document.addEventListener('keydown', keyDownHandler, false);
@@ -529,9 +536,6 @@ function onAmazonPlatformReady() {
 
 document.addEventListener("amazonPlatformReady", onAmazonPlatformReady, false);
 
-
-
-
 function keyDownHandler(event) {
     var key = event.which || event.keyCode;
     if (key === 38) {
@@ -544,8 +548,6 @@ function keyDownHandler(event) {
     }
     if (key === 40) {
         //down arrow
-
-
         if (SHIRT_COLOR < 127) {
             SHIRT_COLOR += 1;
         } else {
@@ -580,6 +582,9 @@ function keyDownHandler(event) {
     if ((key === 13) || (key === 32)) {
         if (jumping === 0) {
             jumping = 1;
+            running = 5;
+            accel_y = 0.60;
+            vel_y = -1.80;
         }
     }
 }
@@ -610,6 +615,19 @@ function draw() {
         sound_duration = 2;
     }
 
+    if (pos_y > 0) {
+        accel_y = 0;
+        vel_y = 0;
+        pos_y = 0;
+        jumping = 0;
+        running = 0;
+    }
+
+    pos_x += vel_x;
+    vel_y += accel_y * dt / 50.0;
+    pos_y += vel_y;
+
+
     color_p1 = (color_p1 + 8) & 0x7F;
     animation += dt / 30.0;
     if (animation >= 5.0) {
@@ -618,6 +636,9 @@ function draw() {
     }
 
     a = Math.trunc(animation);
+
+    x = Math.trunc(pos_x);
+    y = Math.trunc(pos_y);
 
     screen();
     background(0, SCREEN_Y, DARKESS_COLOR);
@@ -658,7 +679,7 @@ function draw() {
     player1(124, 118, log_roll, 1, 1, 0, HAIR_LOG_COLOR);
 
     for (i = 0; i < 21; i += 1) {
-        player0(x, 104 + i, harry.slice(i + running * 21, i + running * 21 + 1), 1, 1, direction, nem_color[i]);
+        player0(x, y + 104 + i, harry.slice(i + running * 21, i + running * 21 + 1), 1, 1, direction, nem_color[i]);
     }
 
  //   for (i = 0; i < 21; i += 1) {
