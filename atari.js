@@ -448,6 +448,40 @@ var collision_detection = [NUMBER_OF_OBJECTS];
 var collision_array = [SCREEN_X * SCREEN_Y];
 
 
+// 3.58MHz clock divided by 114
+var pixelclock = 3580000;
+// CPUclock = pixelclock/3
+var f1 = pixelclock / 114;
+var duration_ms = 300;
+var samples = (f1 / 1000 * duration_ms);
+
+// from TiaSound.c
+
+var p4 = 0;
+var p5 = 0;
+var p9 = 0;
+
+var Pure = new Float32Array([0, 1]);
+
+var Div31 = new Float32Array([0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+
+var Bit5 = new Float32Array([0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1]);
+var POLY5_SIZE = Bit5.length;
+
+var Bit4 = [1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0];
+var POLY4_SIZE = Bit4.length;
+
+var POLY9_SIZE = 511;
+var Bit9 = new Float32Array(POLY9_SIZE);
+var POLY9 = 0x08;
+
+var p = 0;
+
+for (p = 0; p < POLY9_SIZE; p += 1) {
+    Bit9[p] = (Math.round(Math.random()));
+}
+
+
 // create web audio api context
 var AudioContextCtor = window.AudioContext || window.webkitAudioContext;
 var audioCtx = new AudioContextCtor();
@@ -457,6 +491,10 @@ var gain1;
 
 var oscillator2;
 var gain2;
+
+var imag = new Float32Array([0, 0, 1, 0, 1]); // sine
+var real = new Float32Array(imag.length); // cos
+var customWave = audioCtx.createPeriodicWave(Bit9, Bit9); // cos,sine
 
 oscillator1 = audioCtx.createOscillator();
 gain1 = audioCtx.createGain();
@@ -468,7 +506,8 @@ oscillator1.type = 'square';
 gain1.gain.value = 0.0;
 oscillator1.frequency.value = 440; // value in hertz
 
-oscillator2.type = 'square';
+oscillator2.setPeriodicWave(customWave);
+//oscillator2.type = 'square';
 gain2.gain.value = 0.0;
 oscillator2.frequency.value = 44; // value in hertz
 
@@ -496,7 +535,7 @@ function sound(snum, svol, sfreq, stype) {
     if (snum === 2) {
         gain2.gain.value = svol;
         oscillator2.frequency.value = sfreq;
-        oscillator2.type = stype;
+        //       oscillator2.type = stype;
     }
 }
 
@@ -520,10 +559,10 @@ function rectangle(x, y, width, height, color) {
     var pixel_width = canvas.width / SCREEN_X,
         pixel_height = canvas.height / SCREEN_Y;
     ctx.beginPath();
-	ctx.rect(x * pixel_width, y * pixel_height, width * pixel_width, height * pixel_height);
-	ctx.fillStyle = colorsHex[color];
-	ctx.fill();
-	ctx.closePath();
+    ctx.rect(x * pixel_width, y * pixel_height, width * pixel_width, height * pixel_height);
+    ctx.fillStyle = colorsHex[color];
+    ctx.fill();
+    ctx.closePath();
 }
 
 
@@ -770,15 +809,15 @@ function player0(x, y, data, pixel_width, pixel_height, mirror, color) {
         line_length = data[0].length;
     for (j = 0; j < data.length; j += 1) {
         for (i = 0; i < line_length; i += 1) {
-	        if (data[j].charAt(((line_length - 1) * mirror) + (1 - 2 * mirror) * i) === 'X') {
+            if (data[j].charAt(((line_length - 1) * mirror) + (1 - 2 * mirror) * i) === 'X') {
                 rectangle(x + i * pixel_width, y + j * pixel_height, pixel_width, pixel_height, color);
                 for (n = 0; n < pixel_width; n += 1) {
                     for (m = 0; m < pixel_height; m += 1) {
                         update_collision(P0, x + (i * pixel_width) + n, y + (j * pixel_height) + m);
                     }
                 }
-	        }
-	    }
+            }
+        }
     }
 }
 
@@ -792,15 +831,14 @@ function player1(x, y, data, pixel_width, pixel_height, mirror, color) {
         line_length = data[0].length;
     for (j = 0; j < data.length; j += 1) {
         for (i = 0; i < line_length; i += 1) {
-	        if (data[j].charAt(((line_length - 1) * mirror) + (1 - 2 * mirror) * i) === 'X') {
+            if (data[j].charAt(((line_length - 1) * mirror) + (1 - 2 * mirror) * i) === 'X') {
                 rectangle(x + i * pixel_width, y + j * pixel_height, pixel_width, pixel_height, color);
                 for (n = 0; n < pixel_width; n += 1) {
                     for (m = 0; m < pixel_height; m += 1) {
                         update_collision(P1, x + (i * pixel_width) + n, y + (j * pixel_height) + m);
                     }
                 }
-	        }
-	    }
+            }
+        }
     }
 }
-

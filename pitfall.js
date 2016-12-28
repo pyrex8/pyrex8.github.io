@@ -567,6 +567,8 @@ function keyDownHandler(event) {
             running = 5;
             accel_y = 2.10;
             vel_y = -4.00;
+            sound(2, sound_vol, freq_2, type_2);
+            sound_duration = 5;
         }
     }
 }
