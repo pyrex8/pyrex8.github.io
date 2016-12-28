@@ -1,4 +1,4 @@
-/*global myCanvas, keyDownHandler, tapDownHandler,  SCREEN_X, SCREEN_Y, INTERLACE, PF, BL, P0, P1, M0, M1, sound, screen, reset_collision, get_collision, background, print_large, print_small, number_large, number_small, playfield, player0, player1, ball, missile0, missile1, requestAnimationFrame*/
+/*global myCanvas, keyDownHandler, keyUpHandler, tapDownHandler,  SCREEN_X, SCREEN_Y, INTERLACE, PF, BL, P0, P1, M0, M1, sound, screen, reset_collision, get_collision, background, print_large, print_small, number_large, number_small, playfield, player0, player1, ball, missile0, missile1, requestAnimationFrame*/
 /*jslint node: true */
 /*jslint bitwise: true*/
 'use strict';
@@ -516,8 +516,13 @@ var vel_y = 0;
 var accel_y = 0;
 
 var i = 0;
+var j = 0;
 
 document.addEventListener('keydown', keyDownHandler, false);
+
+document.addEventListener('keyup', keyUpHandler, false);
+
+
 
 function onPause() {
     sound_duration = 0;
@@ -538,22 +543,12 @@ document.addEventListener("amazonPlatformReady", onAmazonPlatformReady, false);
 
 function keyDownHandler(event) {
     var key = event.which || event.keyCode;
-    if (key === 38) {
+//    if (key === 38) {
         //up arrow
-        if (SHIRT_COLOR > 0) {
-            SHIRT_COLOR -= 1;
-        } else {
-            SHIRT_COLOR = 127;
-        }
-    }
-    if (key === 40) {
+//    }
+//    if (key === 40) {
         //down arrow
-        if (SHIRT_COLOR < 127) {
-            SHIRT_COLOR += 1;
-        } else {
-            SHIRT_COLOR = 0;
-        }
-    }
+//    }
 
     if (key === 37) {
         //left arrow
@@ -575,6 +570,21 @@ function keyDownHandler(event) {
         }
     }
 }
+
+
+function keyUpHandler(event) {
+    var key = event.which || event.keyCode;
+    if (key === 37) {
+        //left arrow
+        vel_x = 0;
+    }
+    if (key === 39) {
+        //right arrow
+        vel_x = 0;
+    }
+}
+
+
 
 function draw() {
     var a,
@@ -628,15 +638,11 @@ function draw() {
         }
     } else {
         if ((Math.trunc(pos_x) !== x) && (jumping === 0)) {
-            running += 1;
+            running += 0.5;
             if (running > 5) {
-                running = 0;
+                running = 1;
             }
         }
-    }
-
-    if (jumping === 0) {
-        vel_x = 0;
     }
 
     color_p1 = (color_p1 + 8) & 0x7F;
@@ -688,8 +694,15 @@ function draw() {
 
     player1(124, 118, log_roll, 1, 1, 0, HAIR_LOG_COLOR);
 
+
+
+    j = Math.trunc(running);
+
+
+//    j = Math.trunc((x % 8) / 2) + 1;
+
     for (i = 0; i < 21; i += 1) {
-        player0(x, y + 104 + i, harry.slice(i + running * 21, i + running * 21 + 1), 1, 1, direction, nem_color[i]);
+        player0(x, y + 104 + i, harry.slice(i + j * 21, i + j * 21 + 1), 1, 1, direction, nem_color[i]);
     }
 
     player1(34, 59, branch1, 1, 1, 0, TRUNK_COLOR);
