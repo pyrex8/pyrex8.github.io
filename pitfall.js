@@ -543,12 +543,16 @@ document.addEventListener("amazonPlatformReady", onAmazonPlatformReady, false);
 
 function keyDownHandler(event) {
     var key = event.which || event.keyCode;
-//    if (key === 38) {
+    if (key === 38) {
         //up arrow
-//    }
-//    if (key === 40) {
+        sound(1, sound_vol, 10438/511, type_2);
+        sound_duration = 5;
+    }
+    if (key === 40) {
         //down arrow
-//    }
+        sound(1, sound_vol, 440, type_2);
+        sound_duration = 5;
+    }
 
     if (key === 37) {
         //left arrow
@@ -567,7 +571,7 @@ function keyDownHandler(event) {
             running = 5;
             accel_y = 2.10;
             vel_y = -4.00;
-            sound(2, sound_vol, freq_2, type_2);
+            sound(2, sound_vol, 10438/511, type_2);
             sound_duration = 5;
         }
     }

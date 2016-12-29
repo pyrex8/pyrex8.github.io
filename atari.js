@@ -1,5 +1,6 @@
 /*jslint node: true */
 /*jslint bitwise: true*/
+/*global Float32Array*/
 'use strict';
 
 // From Stella running color.bin in Ubuntu using Gpick
@@ -452,34 +453,95 @@ var collision_array = [SCREEN_X * SCREEN_Y];
 var pixelclock = 3580000;
 // CPUclock = pixelclock/3
 var f1 = pixelclock / 114;
-var duration_ms = 300;
-var samples = (f1 / 1000 * duration_ms);
 
 // from TiaSound.c
 
-var p4 = 0;
-var p5 = 0;
-var p9 = 0;
+var POLY1_SIZE = 2;
+var POLY4_SIZE = 15;
+var POLY5_SIZE = 31;
+var POLY9_SIZE = POLY4_SIZE * POLY5_SIZE;
 
-var Pure = new Float32Array([0, 1]);
+var audc_empty_poly1 = new Float32Array(POLY1_SIZE);
+var audc_empty_poly4 = new Float32Array(POLY4_SIZE);
+var audc_empty_poly5 = new Float32Array(POLY5_SIZE);
+var audc_empty_poly9 = new Float32Array(POLY9_SIZE);
 
-var Div31 = new Float32Array([0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
-
-var Bit5 = new Float32Array([0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1]);
-var POLY5_SIZE = Bit5.length;
-
-var Bit4 = [1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0];
-var POLY4_SIZE = Bit4.length;
-
-var POLY9_SIZE = 511;
-var Bit9 = new Float32Array(POLY9_SIZE);
-var POLY9 = 0x08;
+var audc_00_11 = new Float32Array([1, 1]);
+var audc_01_02 = new Float32Array([0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1]);// 02 is div31
+var audc_03 = new Float32Array(POLY9_SIZE);
+var audc_04_05 = new Float32Array([0, 1]);
+var audc_06_10_14 = new Float32Array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+var audc_07_09_15 = new Float32Array([0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1]);
+var audc_08 = new Float32Array(POLY9_SIZE);
+// div 3 clock
+var audc_12_13 = new Float32Array([1, 0]);
 
 var p = 0;
+var q = 0;
 
 for (p = 0; p < POLY9_SIZE; p += 1) {
-    Bit9[p] = (Math.round(Math.random()));
+    audc_08[p] = (Math.round(Math.random()));
 }
+
+for (p = 0; p < POLY4_SIZE; p += 1) {
+    for (q = 0; q < POLY5_SIZE; q += 1) {
+        if (audc_07_09_15[p] === 1) {
+            audc_08[p * POLY5_SIZE + q] = audc_01_02[q];
+        } else {
+            audc_08[p * POLY5_SIZE + q] = 0;
+        }
+    }
+}
+
+
+
+// # HEX  D3 D2 D1 D0    Clock Source    Clock Modifier    Source Pattern
+// # --- -------------  --------------  ----------------  ----------------
+// #  0    0  0  0  0    3.58 MHz/114 ->  none  (pure)  ->      none
+// #  1    0  0  0  1    3.58 MHz/114 ->  none  (pure)  ->   4-bit poly
+// #  2    0  0  1  0    3.58 MHz/114 ->  divide by 31  ->   4-bit poly
+// #  3    0  0  1  1    3.58 MHz/114 ->   5-bit poly   ->   4-bit poly
+// #  4    0  1  0  0    3.58 MHz/114 ->  none  (pure)  ->   pure  (~Q)
+// #  5    0  1  0  1    3.58 MHz/114 ->  none  (pure)  ->   pure  (~Q)
+// #  6    0  1  1  0    3.58 MHz/114 ->  divide by 31  ->   pure  (~Q)
+// #  7    0  1  1  1    3.58 MHz/114 ->   5-bit poly   ->   pure  (~Q)
+// #  8    1  0  0  0    3.58 MHz/114 ->  none  (pure)  ->   9-bit poly
+// #  9    1  0  0  1    3.58 MHz/114 ->  none  (pure)  ->   5-bit poly
+// #  A    1  0  1  0    3.58 MHz/114 ->  divide by 31  ->   5-bit poly
+// #  B    1  0  1  1    3.58 MHz/114 ->   5-bit poly   ->   5-bit poly
+// #  C    1  1  0  0    1.19 MHz/114 ->  none  (pure)  ->   pure  (~Q)
+// #  D    1  1  0  1    1.19 MHz/114 ->  none  (pure)  ->   pure  (~Q)
+// #  E    1  1  1  0    1.19 MHz/114 ->  divide by 31  ->   pure  (~Q)
+// #  F    1  1  1  1    1.19 MHz/114 ->   5-bit poly   ->   pure  (~Q)
+
+//# TIASOUND emulation package by Ron Fry
+//# from ATARI 2600 VCS SOUND FREQUENCY AND WAVEFORM GUIDE by Eckhard Stolberg
+//# Atari 2600 Music And Sound Programming Guide by Paul Slocum
+//# The Atari 2600 Music and Sound Page, Random Terrain
+//# Distortion Table AUDC0 and AUDC1 control register
+//# All scalled for pixelclock/114
+//# 0 = 1 (always high)
+//# 11 = 1
+//# 1 = 001010000111011 (Saw     sounds similar to a saw waveform)
+//# 2 = 001010000111011->0100000000000000000100000000000 (465 bits long)
+//#(Engine  many 2600 games use this for an engine sound)
+//# 3 = 001010000111011->0010110011111000110111010100001 (465 bits long)
+//# 4 = 01 (Square  a high pitched square waveform)
+//# 5 = 01
+//# 6 = 1111111111111000000000000000000 (Bass    fat bass sound)
+//# 10 = 1111111111111000000000000000000
+//# 7 = 0010110011111000110111010100001 (Pitfall log sound in pitfall
+//#, low and buzzy)
+//# 9 = 0010110011111000110111010100001
+//# 8 = 511 bits long (white noise) (Noise   white noise)
+
+//# 12 through 15 use CPUclock/114 so stretch each bit by 3 to make
+//# pixelclock/114 compatable
+//# 12 = 10 (Lead    lower pitch square wave sound)
+//# 13 = 10
+//# 14 = 1111111111111000000000000000000
+//# 15 = 0010110011111000110111010100001 (Buzz atonal buzz, good for percussion)
+
 
 
 // create web audio api context
@@ -492,9 +554,14 @@ var gain1;
 var oscillator2;
 var gain2;
 
-var imag = new Float32Array([0, 0, 1, 0, 1]); // sine
-var real = new Float32Array(imag.length); // cos
-var customWave = audioCtx.createPeriodicWave(Bit9, Bit9); // cos,sine
+var wave_00_11 = audioCtx.createPeriodicWave(audc_00_11, audc_empty_poly1);
+var wave_01_02 = audioCtx.createPeriodicWave(audc_01_02, audc_empty_poly4);
+var wave_03 = audioCtx.createPeriodicWave(audc_03, audc_empty_poly9);
+var wave_04_05 = audioCtx.createPeriodicWave(audc_04_05, audc_empty_poly1);
+var wave_06_10_14 = audioCtx.createPeriodicWave(audc_06_10_14, audc_empty_poly5);
+var wave_07_09_15 = audioCtx.createPeriodicWave(audc_07_09_15, audc_empty_poly5);
+var wave_08 = audioCtx.createPeriodicWave(audc_08, audc_empty_poly9);
+var wave_12_13 = audioCtx.createPeriodicWave(audc_12_13, audc_empty_poly1);
 
 oscillator1 = audioCtx.createOscillator();
 gain1 = audioCtx.createGain();
@@ -502,11 +569,11 @@ gain1 = audioCtx.createGain();
 oscillator2 = audioCtx.createOscillator();
 gain2 = audioCtx.createGain();
 
-oscillator1.type = 'square';
+oscillator1.setPeriodicWave(wave_01_02);
 gain1.gain.value = 0.0;
 oscillator1.frequency.value = 440; // value in hertz
 
-oscillator2.setPeriodicWave(customWave);
+oscillator2.setPeriodicWave(wave_08);
 //oscillator2.type = 'square';
 gain2.gain.value = 0.0;
 oscillator2.frequency.value = 44; // value in hertz
@@ -526,16 +593,36 @@ oscillator2.start(0);
 // type
 
 
-function sound(snum, svol, sfreq, stype) {
+function sound(snum, audv, audf, audc) {
+    var i,
+        outvol,
+        svol,
+        sfreq,
+        sound_data = [];
+    svol = audv;
+    sfreq = audf;
+//    svol = (audv & 0xF)/0xF;
+//    if ((audc & 0x0C) === 0x0C) {
+//        clk_divider = 3;
+//    }
+//    if ((audc & 0x0C) === 0x0C) {
+//        clk_divider = 3;
+//    }
+
+//    }
+
+
+
+
     if (snum === 1) {
         gain1.gain.value = svol;
         oscillator1.frequency.value = sfreq;
-        oscillator1.type = stype;
+        oscillator1.setPeriodicWave(wave_00_11);
     }
     if (snum === 2) {
         gain2.gain.value = svol;
         oscillator2.frequency.value = sfreq;
-        //       oscillator2.type = stype;
+        oscillator2.setPeriodicWave(wave_08);
     }
 }
 
