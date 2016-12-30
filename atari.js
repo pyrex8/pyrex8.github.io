@@ -466,6 +466,12 @@ var audc_empty_poly4 = new Float32Array(POLY4_SIZE);
 var audc_empty_poly5 = new Float32Array(POLY5_SIZE);
 var audc_empty_poly9 = new Float32Array(POLY9_SIZE);
 
+var aud_length = [POLY1_SIZE, POLY4_SIZE, POLY4_SIZE, POLY9_SIZE, POLY1_SIZE, POLY1_SIZE, POLY5_SIZE, POLY5_SIZE, POLY9_SIZE, POLY5_SIZE, POLY5_SIZE, POLY1_SIZE, POLY1_SIZE, POLY5_SIZE, POLY5_SIZE];
+
+
+// 02, 06, 10, 14 x 31
+var aud_clk = [1, 1, POLY5_SIZE, 1, 1, 1, POLY5_SIZE, 1, 1, 1, POLY5_SIZE, 3, 3, 3, 3];
+
 var audc_00_11 = new Float32Array([1, 1]);
 var audc_01_02 = new Float32Array([0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1]);// 02 is div31
 var audc_03 = new Float32Array(POLY9_SIZE);
@@ -563,6 +569,7 @@ var wave_07_09_15 = audioCtx.createPeriodicWave(audc_07_09_15, audc_empty_poly5)
 var wave_08 = audioCtx.createPeriodicWave(audc_08, audc_empty_poly9);
 var wave_12_13 = audioCtx.createPeriodicWave(audc_12_13, audc_empty_poly1);
 
+
 oscillator1 = audioCtx.createOscillator();
 gain1 = audioCtx.createGain();
 
@@ -594,35 +601,58 @@ oscillator2.start(0);
 
 
 function sound(snum, audv, audf, audc) {
-    var i,
-        outvol,
-        svol,
+    var svol,
+        sctrl,
         sfreq,
         sound_data = [];
-    svol = audv;
-    sfreq = audf;
-//    svol = (audv & 0xF)/0xF;
-//    if ((audc & 0x0C) === 0x0C) {
-//        clk_divider = 3;
-//    }
-//    if ((audc & 0x0C) === 0x0C) {
-//        clk_divider = 3;
-//    }
+    svol = (audv & 0x0F) / 0x0F;
+    sctrl = (audc & 0x0F);
+    sfreq = f1 / ((audf & 0x1F) + 1) / aud_length[sctrl] / aud_clk[sctrl];
 
-//    }
-
-
-
+    switch (sctrl) {
+    case 0:
+    case 11:
+        sound_data = wave_00_11;
+        break;
+    case 1:
+    case 2:
+        sound_data = wave_01_02;
+        break;
+    case 3:
+        sound_data = wave_03;
+        break;
+    case 4:
+    case 5:
+        sound_data = wave_04_05;
+        break;
+    case 6:
+    case 10:
+    case 14:
+        sound_data = wave_06_10_14;
+        break;
+    case 7:
+    case 9:
+    case 15:
+        sound_data = wave_07_09_15;
+        break;
+    case 8:
+        sound_data = wave_08;
+        break;
+    case 12:
+    case 13:
+        sound_data = wave_12_13;
+        break;
+    }
 
     if (snum === 1) {
         gain1.gain.value = svol;
         oscillator1.frequency.value = sfreq;
-        oscillator1.setPeriodicWave(wave_00_11);
+        oscillator1.setPeriodicWave(sound_data);
     }
     if (snum === 2) {
         gain2.gain.value = svol;
         oscillator2.frequency.value = sfreq;
-        oscillator2.setPeriodicWave(wave_08);
+        oscillator2.setPeriodicWave(sound_data);
     }
 }
 

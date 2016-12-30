@@ -499,11 +499,11 @@ var color_bk2 = 107;
 
 var sound_duration = 0;
 
-var sound_vol = 0.3;
-var freq_1 = 110;
-var freq_2 = 44;
-var type_1 = 'square';
-var type_2 = 'square';
+var sound_vol = 15;
+var freq_1 = 0;
+var freq_2 = 0;
+var type_1 = 4;
+var type_2 = 4;
 
 var x = 16;
 var y = 0;
@@ -545,24 +545,36 @@ function keyDownHandler(event) {
     var key = event.which || event.keyCode;
     if (key === 38) {
         //up arrow
-        sound(1, sound_vol, 10438/511, type_2);
-        sound_duration = 5;
+        freq_1 += 1;
+        if (freq_1 > 31) {
+            freq_1 = 0;
+        }
     }
     if (key === 40) {
         //down arrow
-        sound(1, sound_vol, 440, type_2);
-        sound_duration = 5;
+        freq_1 -= 1;
+        if (freq_1 < 0) {
+            freq_1 = 31;
+        }
     }
 
     if (key === 37) {
         //left arrow
         direction = 1;
         vel_x = -1.3;
+        type_1 -= 1;
+        if (type_1 < 0) {
+            type_1 = 15;
+        }
     }
     if (key === 39) {
         //right arrow
         direction = 0;
         vel_x = 1.3;
+        type_1 += 1;
+        if (type_1 > 15) {
+            type_1 = 0;
+        }
     }
 
     if ((key === 13) || (key === 32)) {
@@ -571,8 +583,8 @@ function keyDownHandler(event) {
             running = 5;
             accel_y = 2.10;
             vel_y = -4.00;
-            sound(2, sound_vol, 10438/511, type_2);
-            sound_duration = 5;
+            sound(1, sound_vol, freq_1, type_1);
+            sound_duration = 20;
         }
     }
 }
@@ -739,6 +751,14 @@ function draw() {
     player1(i + 8, 189, activison2, 1, 1, 0, LETTERING_COLOR);
     player1(i + 16, 189, activison3, 1, 1, 0, LETTERING_COLOR);
     player1(i + 24, 189, activison4, 1, 1, 0, LETTERING_COLOR);
+
+
+    print_small(47, 90, 'FREQ', 1, LETTERING_COLOR);
+    print_small(98, 90, 'TYPE', 1, LETTERING_COLOR);
+
+    number_small(54, 100, freq_1, 1, LETTERING_COLOR);
+    number_small(104, 100, type_1, 1, LETTERING_COLOR);
+
 
     requestAnimationFrame(draw);
 }
