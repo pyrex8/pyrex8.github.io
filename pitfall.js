@@ -584,7 +584,7 @@ function keyDownHandler(event) {
             accel_y = 2.10;
             vel_y = -4.00;
             sound(1, sound_vol, freq_1, type_1);
-            sound_duration = 20;
+            sound_duration = 5;
         }
     }
 }

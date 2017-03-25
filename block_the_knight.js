@@ -1130,11 +1130,11 @@ var jumping = 0;
 
 var sound_duration = 0;
 
-var sound_vol = 0.3;
-var freq_1 = 2;
-var freq_2 = 18;
-var type_1 = 4;
-var type_2 = 4;
+var sound_vol = 10;
+var freq_1 = 31;
+var freq_2 = 24;
+var type_1 = 5;
+var type_2 = 5;
 
 document.addEventListener('keydown', keyDownHandler, false);
 document.body.addEventListener('touchstart', tapDownHandler, false);
@@ -1143,8 +1143,8 @@ document.body.addEventListener('click', tapDownHandler, false);
 
 function onPause() {
     sound_duration = 0;
-    sound(1, 0, freq_1, type_1);
-    sound(2, 0, freq_2, type_2);
+    sound(1, 0.3, freq_1, type_1);
+    sound(2, 0.3, freq_2, type_2);
     game_state = PAUSED;
 }
 
