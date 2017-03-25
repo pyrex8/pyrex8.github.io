@@ -1324,6 +1324,7 @@ function draw() {
         //# Start screen
         if (game_state === READY) {
             level_number = 1;
+            retries = 0;
             vel_x = 0;
             vel_y = 0;
             pos_x = 0;
