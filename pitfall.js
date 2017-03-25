@@ -1,4 +1,4 @@
-/*global myCanvas, keyDownHandler, keyUpHandler, tapDownHandler,  SCREEN_X, SCREEN_Y, INTERLACE, PF, BL, P0, P1, M0, M1, sound, screen, reset_collision, get_collision, background, print_large, print_small, number_large, number_small, playfield, player0, player1, ball, missile0, missile1, requestAnimationFrame*/
+/*global myCanvas, keyDownHandler, keyUpHandler, tapDownHandler,  SCREEN_X, SCREEN_Y, INTERLACE, PF, BL, P0, P1, M0, M1, sound, screen, reset_collision, get_collision, background, print_large, print_small, number_large, number_small, playfield, player0, player1, ball, missile0, missile1, requestAnimationFrame, test_var*/
 /*jslint node: true */
 /*jslint bitwise: true*/
 'use strict';
@@ -499,7 +499,7 @@ var color_bk2 = 107;
 
 var sound_duration = 0;
 
-var sound_vol = 15;
+var sound_vol = 10;
 var freq_1 = 0;
 var freq_2 = 0;
 var type_1 = 4;
@@ -527,7 +527,7 @@ document.addEventListener('keyup', keyUpHandler, false);
 function onPause() {
     sound_duration = 0;
     sound(1, 0, freq_1, type_1);
-    sound(2, 0, freq_2, type_2);
+    sound(2, 0, freq_1, type_1);
 }
 
 function onResume() {
@@ -619,7 +619,7 @@ function draw() {
         sound_duration -= 1;
     } else {
         sound(1, 0, freq_1, type_1);
-        sound(2, 0, freq_2, type_2);
+        sound(2, 0, freq_1, type_1);
     }
 
     if (game_state === PLAYING) {
@@ -759,6 +759,8 @@ function draw() {
     number_small(54, 100, freq_1, 1, LETTERING_COLOR);
     number_small(104, 100, type_1, 1, LETTERING_COLOR);
 
+    ctx.font = "10px Arial";
+    ctx.fillText(test_var, 10, 10);
 
     requestAnimationFrame(draw);
 }

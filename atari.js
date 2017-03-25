@@ -466,11 +466,11 @@ var audc_empty_poly4 = new Float32Array(POLY4_SIZE);
 var audc_empty_poly5 = new Float32Array(POLY5_SIZE);
 var audc_empty_poly9 = new Float32Array(POLY9_SIZE);
 
-var aud_length = [POLY1_SIZE, POLY4_SIZE, POLY4_SIZE, POLY9_SIZE, POLY1_SIZE, POLY1_SIZE, POLY5_SIZE, POLY5_SIZE, POLY9_SIZE, POLY5_SIZE, POLY5_SIZE, POLY1_SIZE, POLY1_SIZE, POLY5_SIZE, POLY5_SIZE];
+var aud_length = [POLY1_SIZE, POLY4_SIZE, POLY4_SIZE, POLY9_SIZE, POLY1_SIZE, POLY1_SIZE, POLY5_SIZE, POLY5_SIZE, POLY9_SIZE, POLY5_SIZE, POLY5_SIZE, POLY1_SIZE, POLY1_SIZE, POLY5_SIZE, POLY5_SIZE, POLY5_SIZE];
 
 
 // 02, 06, 10, 14 x 31
-var aud_clk = [1, 1, POLY5_SIZE, 1, 1, 1, POLY5_SIZE, 1, 1, 1, POLY5_SIZE, 3, 3, 3, 3];
+var aud_clk = [1, 1, POLY5_SIZE, 1, 1, 1, 1, 1, 1, 1, POLY5_SIZE, 1, 3, 3, 3, 3];
 
 var audc_00_11 = new Float32Array([1, 1]);
 var audc_01_02 = new Float32Array([0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1]);// 02 is div31
@@ -489,17 +489,17 @@ for (p = 0; p < POLY9_SIZE; p += 1) {
     audc_08[p] = (Math.round(Math.random()));
 }
 
-for (p = 0; p < POLY4_SIZE; p += 1) {
-    for (q = 0; q < POLY5_SIZE; q += 1) {
+for (p = 0; p < POLY5_SIZE; p += 1) {
+    for (q = 0; q < POLY4_SIZE; q += 1) {
         if (audc_07_09_15[p] === 1) {
-            audc_08[p * POLY5_SIZE + q] = audc_01_02[q];
+            audc_03[p * POLY5_SIZE + q] = audc_01_02[q];
         } else {
-            audc_08[p * POLY5_SIZE + q] = 0;
+            audc_03[p * POLY5_SIZE + q] = 0;
         }
     }
 }
 
-
+var test_var = 0;
 
 // # HEX  D3 D2 D1 D0    Clock Source    Clock Modifier    Source Pattern
 // # --- -------------  --------------  ----------------  ----------------
@@ -607,7 +607,9 @@ function sound(snum, audv, audf, audc) {
         sound_data = [];
     svol = (audv & 0x0F) / 0x0F;
     sctrl = (audc & 0x0F);
-    sfreq = f1 / ((audf & 0x1F) + 1) / aud_length[sctrl] / aud_clk[sctrl];
+    sfreq = Math.trunc(f1 / ((audf & 0x1F) + 1) / aud_length[sctrl] / aud_clk[sctrl]);
+
+    test_var = sfreq;
 
     switch (sctrl) {
     case 0:

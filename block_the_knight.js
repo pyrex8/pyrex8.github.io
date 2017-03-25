@@ -1131,10 +1131,10 @@ var jumping = 0;
 var sound_duration = 0;
 
 var sound_vol = 0.3;
-var freq_1 = 440;
-var freq_2 = 44;
-var type_1 = 'square';
-var type_2 = 'square';
+var freq_1 = 2;
+var freq_2 = 18;
+var type_1 = 4;
+var type_2 = 4;
 
 document.addEventListener('keydown', keyDownHandler, false);
 document.body.addEventListener('touchstart', tapDownHandler, false);
