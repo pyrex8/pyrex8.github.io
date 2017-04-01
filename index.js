@@ -47,7 +47,7 @@ var pman = [
 var game_list = [
     '         BLOCK THE KNIGHT              ',
     '         PITFALL                       ',
-    '         ------                        ',
+    '         LUNAR LANDER                  ',
     '         ------                        ',
     '         ------                        ',
     '         ------                        ',
@@ -137,8 +137,10 @@ function keyDownHandler(event) {
         if (game_number === 1) {
             location.href = "https://pyrex8.github.io/pitfall.html";
         }
+        if (game_number === 2) {
+            location.href = "https://pyrex8.github.io/lunarlander.html";
+        }
     }
-
 }
 
 
