@@ -48,7 +48,7 @@ var game_list = [
     '         BLOCK THE KNIGHT              ',
     '         PITFALL                       ',
     '         LUNAR LANDER                  ',
-    '         ------                        ',
+    '         LOST                          ',
     '         ------                        ',
     '         ------                        ',
     '         ------                        ',
@@ -139,6 +139,9 @@ function keyDownHandler(event) {
         }
         if (game_number === 2) {
             location.href = "https://pyrex8.github.io/lunarlander.html";
+        }
+        if (game_number === 3) {
+            location.href = "https://pyrex8.github.io/lost.html";
         }
     }
 }
