@@ -17,15 +17,6 @@ var nemesis = [
 
 
 
-var level = [
-
-    //# level 1
-    '........................................',
-    '........................................',
-    '....................X...................',
-    '....................X...................',
-    '....................X...................',
-    '....................X...................'];
 
 
 // Game states
@@ -36,10 +27,10 @@ var DONE = 3;
 
 
 var blocky = [
-    'XXXX    ',
-    'XXXX    ',
-    'XXXX    ',
-    'XXXX    '];
+    '   X   ',
+    ' XXXXX ',
+    'XXXXXXX',
+    '  XXX  '];
 
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
@@ -56,11 +47,11 @@ var spacePressed = false;
 var field_width = 24;
 var NUM_LEVELS = 30;
 
-var color_p0 = 2 + (8 * 3);
+var color_p0 = 7;
 var color_p1 = 1 + (8 * 5);
 var color_pf = 3 + (8 * 8);
-var color_bk1 = 8;
-var color_bk2 = 7 + 8;
+var color_bk1 = 0;
+var color_bk2 = 0;
 
 
 var direction0 = 0;
@@ -79,8 +70,8 @@ var level_number = 1;
 
 
 var t = 0;
-var pos_x = 4;
-var pos_y = (SCREEN_Y / 2 + field_width) * 50;
+var pos_x = SCREEN_X - 3;
+var pos_y = SCREEN_Y - 5;
 var vel_x = 0;
 var vel_y = 0;
 var height0 = 4;
@@ -95,6 +86,17 @@ var freq_1 = 31;
 var freq_2 = 24;
 var type_1 = 5;
 var type_2 = 5;
+
+var qty_stars = 30;
+var my = [];
+var mx = [];
+var j = 0;
+for (j = 0; j < qty_stars; j = j + 1) {
+    mx.push(Math.random() * 159);
+    my.push(Math.random() * 207);
+}
+
+
 
 document.addEventListener('keydown', keyDownHandler, false);
 document.body.addEventListener('touchstart', tapDownHandler, false);
@@ -178,10 +180,7 @@ function draw() {
         screen();
         reset_collision();
 
-        background(0, SCREEN_Y, color_bk1);
-        background(SCREEN_Y / 2 - field_width, 2 * field_width, color_bk2);
-
-
+        background(0, SCREEN_Y, color_bk2);
 
         pos_x += vel_x * dt / 50.0;
         pos_y += vel_y * dt / 50.0;
@@ -192,17 +191,15 @@ function draw() {
         a = Math.trunc(anamation);
         b = level_number - 1;
         c = Math.trunc(nemesis_y);
-        for (i = 0; i < 6; i += 1) {
-            playfield(80 + 8 * i, 8, level[i + 6 * b], color_pf);
+
+        for (j = 0; j < qty_stars; j = j + 1) {
+            missile0(mx[j], my[j], 1, 1, 2);
         }
 
-
-        number_large(9, 2, retries, 2, color_p0);
-        number_large(24, 2, level_number, 2, color_p0);
-
-        print_large(28, 2, '-30', 2, color_p0);
-
     }
+    print_large(12, 4 + 102, 'LOST', 2, color_p0);
+    print_large(12, 4 + 118, ' IN', 2, color_p0);
+    print_large(12, 4 + 134, 'SPACE', 2, color_p0);
     requestAnimationFrame(draw);
 }
 
