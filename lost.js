@@ -70,14 +70,15 @@ var level_number = 1;
 
 
 var t = 0;
-var pos_x = SCREEN_X - 3;
-var pos_y = SCREEN_Y - 5;
+var pos_x = (SCREEN_X / 2) * 50;
+var pos_y = (SCREEN_Y / 2) * 50;
 var vel_x = 0;
 var vel_y = 0;
 var height0 = 4;
 var direction0 = -1.0;
 
 var jumping = 0;
+var direction = 0;
 
 var sound_duration = 0;
 
@@ -127,28 +128,33 @@ function tapDownHandler() {
 }
 
 
-
 function keyDownHandler(event) {
     var key = event.which || event.keyCode;
-    if ((key === 13) || (key === 32)) {
-        if (game_state < DONE) {
-            fire0 = true;
-            game_state = PLAYING;
-        }
+    if (key === 38) {
+        //up arrow
+        vel_y -= 0.1;
     }
-    if ((key === 19) || (key === 179) || (key === 80)) {
-        if (game_state === PLAYING) {
-            onPause();
-        } else {
-            if (game_state === PAUSED) {
-                game_state = PLAYING;
-            } else {
-                game_state = READY;
-            }
+    if (key === 40) {
+        //down arrow
+        vel_y += 0.1;
+    }
 
-        }
+    if (key === 37) {
+        //left arrow
+        vel_x -= 0.1;
+    }
+    if (key === 39) {
+        //right arrow
+        vel_x += 0.1;
+    }
+
+    if ((key === 13) || (key === 32)) {
+        vel_x = 0;
+        vel_y = 0;
     }
 }
+
+
 
 function draw() {
     // drawing code
@@ -182,24 +188,40 @@ function draw() {
 
         background(0, SCREEN_Y, color_bk2);
 
-        pos_x += vel_x * dt / 50.0;
-        pos_y += vel_y * dt / 50.0;
+
+        for (j = 0; j < qty_stars; j = j + 1) {
+
+            mx[j] += vel_x * dt / 50.0;
+            if (mx[j] > SCREEN_X) {
+                mx[j] -= SCREEN_X;
+            }
+            if (mx[j] < 0) {
+                mx[j] += SCREEN_X;
+            }
+            my[j] += vel_y * dt / 50.0;
+            if (my[j] > SCREEN_Y) {
+                my[j] -= SCREEN_Y;
+            }
+            if (my[j] < 0) {
+                my[j] += SCREEN_Y;
+            }
+
+            missile0(mx[j], my[j], 1, 1, 2);
+        }
 
 
-        player0(Math.trunc(pos_x / 50), Math.trunc(pos_y / 50) - 4, blocky, 1, 2, 0, color_p0);
+
+        player0((SCREEN_X / 2), (SCREEN_Y / 2) - 4, blocky, 1, 2, 0, color_p0);
 
         a = Math.trunc(anamation);
         b = level_number - 1;
         c = Math.trunc(nemesis_y);
 
-        for (j = 0; j < qty_stars; j = j + 1) {
-            missile0(mx[j], my[j], 1, 1, 2);
-        }
 
     }
-    print_large(12, 4 + 102, 'LOST', 2, color_p0);
-    print_large(12, 4 + 118, ' IN', 2, color_p0);
-    print_large(12, 4 + 134, 'SPACE', 2, color_p0);
+    //print_large(12, 4 + 102, 'LOST', 2, color_p0);
+    //print_large(12, 4 + 118, ' IN', 2, color_p0);
+    //print_large(12, 4 + 134, 'SPACE', 2, color_p0);
     requestAnimationFrame(draw);
 }
 
