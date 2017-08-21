@@ -13,11 +13,14 @@ var nemesis = [
 
 
 
+var planet = [
+    '   X                 X         XXX      ',
+    ' XXXX XXX     XX    XXX      XXXXXXXX   ',
+    'XXXXXXXXXXX  XXXX  XXXXX   XXXXXXXXXXXXX',
+    'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+    'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'];
 
-
-
-
-
+var planet_scrolled = planet;
 
 // Game states
 var PAUSED = 1;
@@ -47,9 +50,9 @@ var spacePressed = false;
 var field_width = 24;
 var NUM_LEVELS = 30;
 
-var color_p0 = 7;
-var color_p1 = 1 + (8 * 5);
-var color_pf = 3 + (8 * 8);
+var color_p0 = 5;
+var color_p1 = 3;
+var color_pf = 4;
 var color_bk1 = 0;
 var color_bk2 = 0;
 
@@ -96,7 +99,8 @@ for (j = 0; j < qty_stars; j = j + 1) {
     mx.push(Math.random() * 159);
     my.push(Math.random() * 207);
 }
-
+mx[0] = 0;
+my[0] = 0;
 
 
 document.addEventListener('keydown', keyDownHandler, false);
@@ -177,8 +181,6 @@ function draw() {
         sound(2, 0, freq_2, type_2);
     }
 
-
-
     if (game_state === PAUSED) {
         print_large(2, 4 + 152, '   GAME', 2, color_p0);
         print_large(2, 4 + 168, '  PAUSED', 2, color_p0);
@@ -187,7 +189,6 @@ function draw() {
         reset_collision();
 
         background(0, SCREEN_Y, color_bk2);
-
 
         for (j = 0; j < qty_stars; j = j + 1) {
 
@@ -209,15 +210,15 @@ function draw() {
             missile0(mx[j], my[j], 1, 1, 2);
         }
 
+        // draw planet
+        for (i = 0; i < 5; i += 1) {
+            b = (SCREEN_X - mx[0]) / 4;
+            a = planet[i].slice(b, 39) + planet[i].slice(0, b);
+            playfield(199 + i * 2, 2, a, color_p1);
+        }
 
 
         player0((SCREEN_X / 2), (SCREEN_Y / 2) - 4, blocky, 1, 2, 0, color_p0);
-
-        a = Math.trunc(anamation);
-        b = level_number - 1;
-        c = Math.trunc(nemesis_y);
-
-
     }
     //print_large(12, 4 + 102, 'LOST', 2, color_p0);
     //print_large(12, 4 + 118, ' IN', 2, color_p0);
