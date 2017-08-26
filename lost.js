@@ -51,10 +51,10 @@ var DONE = 3;
 
 
 var blocky = [
-    '   X   ',
-    ' XXXXX ',
-    'XXXXXXX',
-    '  XXX  '];
+    ' XXX',
+    'XXX ',
+    'XXX ',
+    ' XXX'];
 
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
@@ -250,7 +250,7 @@ function draw() {
         }
 
 
-        player0((SCREEN_X / 2), (SCREEN_Y / 2) - 4, blocky, 1, 2, 0, color_p0);
+        player0((SCREEN_X / 2), (SCREEN_Y / 2), blocky, 1, 2, 0, color_p0);
     }
     //print_large(12, 4 + 102, 'LOST', 2, color_p0);
     //print_large(12, 4 + 118, ' IN', 2, color_p0);
