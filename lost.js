@@ -54,7 +54,22 @@ var blocky = [
     ' XXX',
     'XXX ',
     'XXX ',
-    ' XXX'];
+    ' XXX',
+
+    ' XX ',
+    'XXXX',
+    'XXXX',
+    'X  X',
+
+    'XXX ',
+    ' XXX',
+    ' XXX',
+    'XXX ',
+
+    'X  X',
+    'XXXX',
+    'XXXX',
+    ' XX '];
 
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
@@ -99,7 +114,7 @@ var pos_y = (SCREEN_Y / 2) * 50;
 var vel_x = 0;
 var vel_y = 0;
 var height0 = 4;
-var direction0 = -1.0;
+var direction0 = 0;
 
 var jumping = 0;
 var direction = 0;
@@ -161,19 +176,23 @@ function keyDownHandler(event) {
     if (key === 38) {
         //up arrow
         vel_y -= 0.1;
+        direction0 = 1;
     }
     if (key === 40) {
         //down arrow
         vel_y += 0.1;
+        direction0 = 3;
     }
 
     if (key === 37) {
         //left arrow
         vel_x -= 0.1;
+        direction0 = 0;
     }
     if (key === 39) {
         //right arrow
         vel_x += 0.1;
+        direction0 = 2;
     }
 
     if ((key === 13) || (key === 32)) {
@@ -249,8 +268,8 @@ function draw() {
             playfield(i * 8, 8, a, color_pf);
         }
 
-
-        player0((SCREEN_X / 2), (SCREEN_Y / 2), blocky, 1, 2, 0, color_p0);
+        d = direction0 * 4;
+        player0((SCREEN_X / 2), (SCREEN_Y / 2), blocky.slice(d, d + 4), 1, 2, 0, color_p0);
     }
     //print_large(12, 4 + 102, 'LOST', 2, color_p0);
     //print_large(12, 4 + 118, ' IN', 2, color_p0);
