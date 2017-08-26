@@ -15,10 +15,31 @@ var nemesis = [
 
 var planet = [
     '   X                 X         XXX      ',
-    ' XXXX XXX     XX    XXX      XXXXXXXX   ',
-    'XXXXXXXXXXX  XXXX  XXXXX   XXXXXXXXXXXXX',
-    'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-    'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'];
+    '          XX                   XXXX     ',
+    'XX                              XX      ',
+    '         X       XXXX                   ',
+    'XX                        XX            ',
+    '   X                 X         XXX      ',
+    '          XX                   XXXX     ',
+    'XX                              XX      ',
+    '         X       XXXX                   ',
+    'XX                        XX            ',
+    '   X                 X         XXX      ',
+    '          XX                   XXXX     ',
+    'XX                              XX      ',
+    '         X       XXXX                   ',
+    'XX                        XX            ',
+    '   X                 X         XXX      ',
+    '          XX                   XXXX     ',
+    'XX                              XX      ',
+    '         X       XXXX                   ',
+    'XX                        XX            ',
+    '   X                 X         XXX      ',
+    '          XX                   XXXX     ',
+    'XX                              XX      ',
+    '         X       XXXX                   ',
+    'XX                        XX            ',
+    '   X                 X         XXX      '];
 
 var planet_scrolled = planet;
 
@@ -50,9 +71,9 @@ var spacePressed = false;
 var field_width = 24;
 var NUM_LEVELS = 30;
 
-var color_p0 = 5;
+var color_p0 = 15;
 var color_p1 = 3;
-var color_pf = 4;
+var color_pf = 34;
 var color_bk1 = 0;
 var color_bk2 = 0;
 
@@ -94,10 +115,13 @@ var type_2 = 5;
 var qty_stars = 30;
 var my = [];
 var mx = [];
+var mi = [];
+var star_twinkle_rate = 0;
 var j = 0;
 for (j = 0; j < qty_stars; j = j + 1) {
     mx.push(Math.random() * 159);
     my.push(Math.random() * 207);
+    mi.push(Math.trunc(Math.random() * 3) + 1);
 }
 mx[0] = 0;
 my[0] = 0;
@@ -190,6 +214,7 @@ function draw() {
 
         background(0, SCREEN_Y, color_bk2);
 
+        star_twinkle_rate += 1;
         for (j = 0; j < qty_stars; j = j + 1) {
 
             mx[j] += vel_x * dt / 50.0;
@@ -207,14 +232,21 @@ function draw() {
                 my[j] += SCREEN_Y;
             }
 
-            missile0(mx[j], my[j], 1, 1, 2);
+            if (star_twinkle_rate > 10) {
+                mi[j] = Math.trunc(Math.random() * 3) + 1;
+            }
+
+            missile0(mx[j], my[j], 1, 2, mi[j]);
+        }
+        if (star_twinkle_rate > 10) {
+            star_twinkle_rate = 0;
         }
 
         // draw planet
-        for (i = 0; i < 5; i += 1) {
+        for (i = 0; i < 26; i += 1) {
             b = (SCREEN_X - mx[0]) / 4;
             a = planet[i].slice(b, 39) + planet[i].slice(0, b);
-            playfield(199 + i * 2, 2, a, color_p1);
+            playfield(i * 8, 8, a, color_pf);
         }
 
 
