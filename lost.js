@@ -108,6 +108,7 @@ var fire_vy = 0;
 var retries = 0;
 var level_number = 1;
 
+var fire_v = 4;
 var accel_rate = 1;
 var decel_rate = 0.003;
 
@@ -179,19 +180,23 @@ function keyDownHandler(event) {
     if (key === 38) {
         //up arrow
         direction0 = 1;
+        vel_y -= accel_rate;
     }
     if (key === 40) {
         //down arrow
         direction0 = 3;
+        vel_y += accel_rate;
     }
 
     if (key === 37) {
         //left arrow
         direction0 = 0;
+        vel_x += accel_rate;
     }
     if (key === 39) {
         //right arrow
         direction0 = 2;
+        vel_x -= accel_rate;
     }
 
     if ((key === 13) || (key === 32)) {
@@ -202,28 +207,25 @@ function keyDownHandler(event) {
             fire_x = (SCREEN_X / 2) + 1;
             fire_y = (SCREEN_Y / 2) + 1;
             if (direction0 === 0) {
-                vel_x -= accel_rate;
-                fire_vx = -accel_rate;
+                fire_vx = -fire_v;
                 fire_vy = 0;
             }
             if (direction0 === 1) {
-                vel_y -= accel_rate;
                 fire_vx = 0;
-                fire_vy = -accel_rate;
+                fire_vy = -fire_v;
             }
             if (direction0 === 2) {
-                vel_x += accel_rate;
-                fire_vx = accel_rate;
+                fire_vx = fire_v;
                 fire_vy = 0;
             }
             if (direction0 === 3) {
-                vel_y += accel_rate;
                 fire_vx = 0;
-                fire_vy = accel_rate;
+                fire_vy = fire_v;
             }
         }
     }
 }
+
 
 
 
@@ -279,7 +281,7 @@ function draw() {
                 mi[j] = Math.trunc(Math.random() * 3) + 1;
             }
 
-            missile1(mx[j], my[j], 1, 2, mi[j]);
+            missile1(mx[j], SCREEN_Y - my[j], 1, 2, mi[j]);
         }
         if (star_twinkle_rate > 10) {
             star_twinkle_rate = 0;
