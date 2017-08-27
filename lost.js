@@ -196,6 +196,8 @@ function keyDownHandler(event) {
 
     if ((key === 13) || (key === 32)) {
         if (fire0 === false) {
+            sound(2, sound_vol, freq_2, type_2);
+            sound_duration = 5;
             fire0 = true;
             fire_x = (SCREEN_X / 2) + 1;
             fire_y = (SCREEN_Y / 2) + 2;
