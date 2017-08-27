@@ -120,6 +120,11 @@ var vel_y = 0;
 var height0 = 4;
 var direction0 = 0;
 
+var pf_x = 0;
+var pf_y = 0;
+var pf_x_last = 0;
+var pf_y_last = 0;
+
 var jumping = 0;
 var direction = 0;
 
@@ -288,10 +293,12 @@ function draw() {
         }
 
         // draw field
-        b = Math.trunc((SCREEN_X - mx[0]) / 4);
-        c = Math.trunc(my[0] / 8);
+        pf_x_last = pf_x;
+        pf_y_last = pf_y;
+        pf_x = Math.trunc((SCREEN_X - mx[0]) / 4);
+        pf_y = Math.trunc(my[0] / 8);
         for (i = 0; i < 26; i += 1) {
-            j = i + c;
+            j = i + pf_y;
             if (j > 25) {
                 j -= 25;
             }
@@ -299,7 +306,7 @@ function draw() {
                 j += 25;
             }
  //           j = i;
-            a = planet[j].slice(b, 39) + planet[j].slice(0, b);
+            a = planet[j].slice(pf_x, 39) + planet[j].slice(0, pf_x);
             playfield(i * 8, 8, a, color_pf);
         }
 
@@ -346,8 +353,14 @@ function draw() {
             fire_y = -8;
         }
 
-
-
+        if (get_collision(P0, PF) === 1) {
+            if (pf_x !== pf_x_last) {
+                vel_x = -vel_x;
+            }
+            if (pf_y !== pf_y_last) {
+                vel_y = -vel_y;
+            }
+        }
     }
     //print_large(12, 4 + 102, 'LOST', 2, color_p0);
     //print_large(12, 4 + 118, 'SPACE', 2, color_p0);
