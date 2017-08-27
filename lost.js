@@ -200,7 +200,7 @@ function keyDownHandler(event) {
             sound_duration = 5;
             fire0 = true;
             fire_x = (SCREEN_X / 2) + 1;
-            fire_y = (SCREEN_Y / 2) + 2;
+            fire_y = (SCREEN_Y / 2) + 1;
             if (direction0 === 0) {
                 vel_x -= accel_rate;
                 fire_vx = -accel_rate;
@@ -267,7 +267,7 @@ function draw() {
             if (mx[j] < 0) {
                 mx[j] += SCREEN_X;
             }
-            my[j] += vel_y * dt / 50.0;
+            my[j] += vel_y * dt / 25.0;
             if (my[j] > SCREEN_Y) {
                 my[j] -= SCREEN_Y;
             }
@@ -286,9 +286,18 @@ function draw() {
         }
 
         // draw field
+        b = Math.trunc((SCREEN_X - mx[0]) / 4);
+        c = Math.trunc(my[0] / 8);
         for (i = 0; i < 26; i += 1) {
-            b = (SCREEN_X - mx[0]) / 4;
-            a = planet[i].slice(b, 39) + planet[i].slice(0, b);
+            j = i + c;
+            if (j > 25) {
+                j -= 25;
+            }
+            if (j < 0) {
+                j += 25;
+            }
+ //           j = i;
+            a = planet[j].slice(b, 39) + planet[j].slice(0, b);
             playfield(i * 8, 8, a, color_pf);
         }
 
