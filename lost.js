@@ -14,32 +14,32 @@ var nemesis = [
 
 
 var planet = [
-    '   X                 X         XXX      ',
+    '                               XXX      ',
     '          XX                   XXXX     ',
     'XX                              XX      ',
-    '         X       XXXX                   ',
-    'XX                        XX            ',
-    '   X                 X         XXX      ',
-    '          XX                   XXXX     ',
-    'XX                              XX      ',
-    '         X       XXXX                   ',
-    'XX                        XX            ',
-    '   X                 X         XXX      ',
-    '          XX                   XXXX     ',
-    'XX                              XX      ',
-    '         X       XXXX                   ',
-    'XX                        XX            ',
-    '   X                 X         XXX      ',
-    '          XX                   XXXX     ',
-    'XX                              XX      ',
-    '         X       XXXX                   ',
-    'XX                        XX            ',
-    '   X                 X         XXX      ',
-    '          XX                   XXXX     ',
-    'XX                              XX      ',
-    '         X       XXXX                   ',
-    'XX                        XX            ',
-    '   X                 X         XXX      '];
+    'XXX              XXXX                  X',
+    'XX               XXXXX    XX            ',
+    '                                        ',
+    '                                        ',
+    '                                        ',
+    '                                        ',
+    '                          XX            ',
+    '   X                     XXXX           ',
+    '   XXX                   XXXX           ',
+    '                          XX            ',
+    '                                        ',
+    '      XXXX                XX            ',
+    '                                        ',
+    '                                        ',
+    '                  XX                    ',
+    '                 XXXX                   ',
+    '                  XX      XX            ',
+    '                               XXX      ',
+    '                               XXXX     ',
+    '   X                            XX      ',
+    '  XXX                                   ',
+    '   X                                    ',
+    '                                        '];
 
 var planet_scrolled = planet;
 
@@ -100,9 +100,10 @@ var anamation = 0.0;
 var nemesis_y = 84.0;
 var direction1 = -1.0;
 var fire = 0;
-var fire_x = 0;
-var fire_y = 0;
-var fire_v = 0;
+var fire_x = (SCREEN_X / 2) - 8;
+var fire_y = (SCREEN_Y / 2) + 2;
+var fire_vx = 0;
+var fire_vy = 0;
 
 var retries = 0;
 var level_number = 1;
@@ -166,7 +167,7 @@ function onAmazonPlatformReady() {
 document.addEventListener("amazonPlatformReady", onAmazonPlatformReady, false);
 
 function tapDownHandler() {
-    fire0 = true;
+    //fire0 = true;
     game_state = PLAYING;
 }
 
@@ -175,29 +176,48 @@ function keyDownHandler(event) {
     var key = event.which || event.keyCode;
     if (key === 38) {
         //up arrow
-        vel_y -= 0.1;
         direction0 = 1;
     }
     if (key === 40) {
         //down arrow
-        vel_y += 0.1;
         direction0 = 3;
     }
 
     if (key === 37) {
         //left arrow
-        vel_x -= 0.1;
         direction0 = 0;
     }
     if (key === 39) {
         //right arrow
-        vel_x += 0.1;
         direction0 = 2;
     }
 
     if ((key === 13) || (key === 32)) {
-        vel_x = 0;
-        vel_y = 0;
+        if (fire0 === false) {
+            fire0 = true;
+            fire_x = (SCREEN_X / 2) + 1;
+            fire_y = (SCREEN_Y / 2) + 2;
+            if (direction0 === 0) {
+                vel_x -= 1;
+                fire_vx = 1;
+                fire_vy = 0;
+            }
+            if (direction0 === 1) {
+                vel_y -= 1;
+                fire_vx = 0;
+                fire_vy = 1;
+            }
+            if (direction0 === 2) {
+                vel_x += 1;
+                fire_vx = -1;
+                fire_vy = 1;
+            }
+            if (direction0 === 3) {
+                vel_y += 1;
+                fire_vx = 0;
+                fire_vy = -1;
+            }
+        }
     }
 }
 
@@ -255,13 +275,13 @@ function draw() {
                 mi[j] = Math.trunc(Math.random() * 3) + 1;
             }
 
-            missile0(mx[j], my[j], 1, 2, mi[j]);
+            missile1(mx[j], my[j], 1, 2, mi[j]);
         }
         if (star_twinkle_rate > 10) {
             star_twinkle_rate = 0;
         }
 
-        // draw planet
+        // draw field
         for (i = 0; i < 26; i += 1) {
             b = (SCREEN_X - mx[0]) / 4;
             a = planet[i].slice(b, 39) + planet[i].slice(0, b);
@@ -270,10 +290,31 @@ function draw() {
 
         d = direction0 * 4;
         player0((SCREEN_X / 2), (SCREEN_Y / 2), blocky.slice(d, d + 4), 1, 2, 0, color_p0);
+
+        if (fire0 === true) {
+            fire_x += fire_vx;
+            fire_y += fire_vy;
+            if (fire_x < 0) {
+                fire0 = false;
+            }
+            if (fire_x > SCREEN_X) {
+                fire0 = false;
+            }
+            if (fire_y < 0) {
+                fire0 = false;
+            }
+            if (fire_y > SCREEN_Y) {
+                fire0 = false;
+            }
+            missile0(fire_x, fire_y, 2, 4, color_p0);
+        }
+
+
+
     }
     //print_large(12, 4 + 102, 'LOST', 2, color_p0);
-    //print_large(12, 4 + 118, ' IN', 2, color_p0);
-    //print_large(12, 4 + 134, 'SPACE', 2, color_p0);
+    //print_large(12, 4 + 118, 'SPACE', 2, color_p0);
+    //print_large(12, 4 + 134, 'BABIES', 2, color_p0);
     requestAnimationFrame(draw);
 }
 
