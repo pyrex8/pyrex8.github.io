@@ -108,6 +108,8 @@ var fire_vy = 0;
 var retries = 0;
 var level_number = 1;
 
+var accel_rate = 1;
+var decel_rate = 0.003;
 
 var t = 0;
 var pos_x = (SCREEN_X / 2) * 50;
@@ -198,24 +200,24 @@ function keyDownHandler(event) {
             fire_x = (SCREEN_X / 2) + 1;
             fire_y = (SCREEN_Y / 2) + 2;
             if (direction0 === 0) {
-                vel_x -= 1;
-                fire_vx = -1;
+                vel_x -= accel_rate;
+                fire_vx = -accel_rate;
                 fire_vy = 0;
             }
             if (direction0 === 1) {
-                vel_y -= 1;
+                vel_y -= accel_rate;
                 fire_vx = 0;
-                fire_vy = -1;
+                fire_vy = -accel_rate;
             }
             if (direction0 === 2) {
-                vel_x += 1;
-                fire_vx = 1;
+                vel_x += accel_rate;
+                fire_vx = accel_rate;
                 fire_vy = 0;
             }
             if (direction0 === 3) {
-                vel_y += 1;
+                vel_y += accel_rate;
                 fire_vx = 0;
-                fire_vy = 1;
+                fire_vy = accel_rate;
             }
         }
     }
@@ -309,8 +311,21 @@ function draw() {
             missile0(fire_x, fire_y, 2, 4, color_p0);
         }
 
+        if (vel_x > 0) {
+            vel_x -= decel_rate;
+        }
 
+        if (vel_x < 0) {
+            vel_x += decel_rate;
+        }
 
+        if (vel_y > 0) {
+            vel_y -= decel_rate;
+        }
+
+        if (vel_y < 0) {
+            vel_y += decel_rate;
+        }
     }
     //print_large(12, 4 + 102, 'LOST', 2, color_p0);
     //print_large(12, 4 + 118, 'SPACE', 2, color_p0);
