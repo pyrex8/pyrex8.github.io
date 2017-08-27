@@ -339,6 +339,15 @@ function draw() {
         if (vel_y < 0) {
             vel_y += decel_rate;
         }
+
+        if (get_collision(M0, PF) === 1) {
+            fire0 = false;
+            fire_x = -4;
+            fire_y = -8;
+        }
+
+
+
     }
     //print_large(12, 4 + 102, 'LOST', 2, color_p0);
     //print_large(12, 4 + 118, 'SPACE', 2, color_p0);
