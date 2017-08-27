@@ -199,23 +199,23 @@ function keyDownHandler(event) {
             fire_y = (SCREEN_Y / 2) + 2;
             if (direction0 === 0) {
                 vel_x -= 1;
-                fire_vx = 1;
+                fire_vx = -1;
                 fire_vy = 0;
             }
             if (direction0 === 1) {
                 vel_y -= 1;
                 fire_vx = 0;
-                fire_vy = 1;
+                fire_vy = -1;
             }
             if (direction0 === 2) {
                 vel_x += 1;
-                fire_vx = -1;
-                fire_vy = 1;
+                fire_vx = 1;
+                fire_vy = 0;
             }
             if (direction0 === 3) {
                 vel_y += 1;
                 fire_vx = 0;
-                fire_vy = -1;
+                fire_vy = 1;
             }
         }
     }
