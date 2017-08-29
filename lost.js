@@ -107,8 +107,9 @@ var decel_rate = 0.03;
 var vel_max = 8;
 
 var t = 0;
-var pos_x = (SCREEN_X / 2) * 50;
-var pos_y = (SCREEN_Y / 2) * 50;
+var pos_div = 50;
+var pos_x = (SCREEN_X / 4) * pos_div;
+var pos_y = (SCREEN_Y / 4) * pos_div;
 var vel_x = 0;
 var vel_y = 0;
 var height0 = 4;
@@ -297,7 +298,23 @@ function draw() {
         d = direction0 * 4;
         player0((SCREEN_X / 2), (SCREEN_Y / 2), ship.slice(d, d + 4), 1, 2, 0, color_p0);
 
-        player1((SCREEN_X / 4), (SCREEN_Y / 4), ship.slice(d, d + 4), 1, 2, 0, color_p1);
+        a = Math.trunc((SCREEN_X - mx) / 4) + Math.trunc(pos_x / pos_div);
+        b = Math.trunc(my / 8) + Math.trunc(pos_y / pos_div);
+        if (a > 20) {
+            a -= 20;
+        }
+        if (a < 0) {
+            a += 20;
+        }
+        if (b > 25) {
+            b -= 25;
+        }
+        if (b < 0) {
+            b += 25;
+        }
+
+
+        player1((a * 4), (b * 8), ship.slice(d, d + 4), 1, 2, 0, color_p1);
 
 
         if (fire0 === true) {
