@@ -5,6 +5,13 @@
 document.getElementById(myCanvas);
 
 
+var nemesis = [
+    'XXXX    ',
+    'XXXX    ',
+    'XXXX    ',
+    'XXXX    '];
+
+
 
 var planet = [
     '                               XXX      ',
@@ -43,7 +50,7 @@ var PLAYING = 2;
 var DONE = 3;
 
 
-var ship = [
+var blocky = [
     ' XXX',
     'XXX ',
     'XXX ',
@@ -80,7 +87,7 @@ var field_width = 24;
 var NUM_LEVELS = 30;
 
 var color_p0 = 15;
-var color_p1 = 53;
+var color_p1 = 3;
 var color_pf = 34;
 var color_bk1 = 0;
 var color_bk2 = 0;
@@ -103,13 +110,11 @@ var level_number = 1;
 
 var fire_v = 4;
 var accel_rate = 1;
-var decel_rate = 0.03;
-var vel_max = 8;
+var decel_rate = 0.003;
 
 var t = 0;
-var pos_div = 50;
-var pos_x = (SCREEN_X / 4) * pos_div;
-var pos_y = (SCREEN_Y / 4) * pos_div;
+var pos_x = (SCREEN_X / 2) * 50;
+var pos_y = (SCREEN_Y / 2) * 50;
 var vel_x = 0;
 var vel_y = 0;
 var height0 = 4;
@@ -132,8 +137,18 @@ var type_1 = 5;
 var type_2 = 5;
 
 var qty_stars = 30;
-var my = 0;
-var mx = 0;
+var my = [];
+var mx = [];
+var mi = [];
+var star_twinkle_rate = 0;
+var j = 0;
+for (j = 0; j < qty_stars; j = j + 1) {
+    mx.push(Math.random() * 159);
+    my.push(Math.random() * 207);
+    mi.push(Math.trunc(Math.random() * 3) + 1);
+}
+mx[0] = 0;
+my[0] = 0;
 
 
 document.addEventListener('keydown', keyDownHandler, false);
@@ -171,34 +186,22 @@ function keyDownHandler(event) {
         //up arrow
         direction0 = 1;
         vel_y -= accel_rate;
-        if (vel_y < -vel_max) {
-            vel_y = -vel_max;
-        }
     }
     if (key === 40) {
         //down arrow
         direction0 = 3;
         vel_y += accel_rate;
-        if (vel_y > vel_max) {
-            vel_y = vel_max;
-        }
     }
 
     if (key === 37) {
         //left arrow
         direction0 = 0;
         vel_x += accel_rate;
-        if (vel_x > vel_max) {
-            vel_x = vel_max;
-        }
     }
     if (key === 39) {
         //right arrow
         direction0 = 2;
         vel_x -= accel_rate;
-        if (vel_x < -vel_max) {
-            vel_x = -vel_max;
-        }
     }
 
     if ((key === 13) || (key === 32)) {
@@ -237,8 +240,7 @@ function draw() {
         b,
         c,
         d,
-        i,
-        j;
+        i;
     thisTime = Date.now();
     dt = thisTime - lastTime;
     lastTime = thisTime;
@@ -262,26 +264,39 @@ function draw() {
 
         background(0, SCREEN_Y, color_bk2);
 
-        mx += vel_x * dt / 50.0;
-        if (mx > SCREEN_X) {
-            mx -= SCREEN_X;
+        star_twinkle_rate += 1;
+        for (j = 0; j < qty_stars; j = j + 1) {
+
+            mx[j] += vel_x * dt / 50.0;
+            if (mx[j] > SCREEN_X) {
+                mx[j] -= SCREEN_X;
+            }
+            if (mx[j] < 0) {
+                mx[j] += SCREEN_X;
+            }
+            my[j] += vel_y * dt / 25.0;
+            if (my[j] > SCREEN_Y) {
+                my[j] -= SCREEN_Y;
+            }
+            if (my[j] < 0) {
+                my[j] += SCREEN_Y;
+            }
+
+            if (star_twinkle_rate > 10) {
+                mi[j] = Math.trunc(Math.random() * 3) + 1;
+            }
+
+            missile1(mx[j], SCREEN_Y - my[j], 1, 2, mi[j]);
         }
-        if (mx < 0) {
-            mx += SCREEN_X;
-        }
-        my += vel_y * dt / 25.0;
-        if (my > SCREEN_Y) {
-            my -= SCREEN_Y;
-        }
-        if (my < 0) {
-            my += SCREEN_Y;
+        if (star_twinkle_rate > 10) {
+            star_twinkle_rate = 0;
         }
 
         // draw field
         pf_x_last = pf_x;
         pf_y_last = pf_y;
-        pf_x = Math.trunc((SCREEN_X - mx) / 4);
-        pf_y = Math.trunc(my / 8);
+        pf_x = Math.trunc((SCREEN_X - mx[0]) / 4);
+        pf_y = Math.trunc(my[0] / 8);
         for (i = 0; i < 26; i += 1) {
             j = i + pf_y;
             if (j > 25) {
@@ -296,26 +311,7 @@ function draw() {
         }
 
         d = direction0 * 4;
-        player0((SCREEN_X / 2), (SCREEN_Y / 2), ship.slice(d, d + 4), 1, 2, 0, color_p0);
-
-        a = Math.trunc((SCREEN_X - mx) / 4) + Math.trunc(pos_x / pos_div);
-        b = Math.trunc(my / 8) + Math.trunc(pos_y / pos_div);
-        if (a > 20) {
-            a -= 20;
-        }
-        if (a < 0) {
-            a += 20;
-        }
-        if (b > 25) {
-            b -= 25;
-        }
-        if (b < 0) {
-            b += 25;
-        }
-
-
-        player1((a * 4), (b * 8), ship.slice(d, d + 4), 1, 2, 0, color_p1);
-
+        player0((SCREEN_X / 2), (SCREEN_Y / 2), blocky.slice(d, d + 4), 1, 2, 0, color_p0);
 
         if (fire0 === true) {
             fire_x += fire_vx;
@@ -338,28 +334,26 @@ function draw() {
         if (vel_x > 0) {
             vel_x -= decel_rate;
         }
+
         if (vel_x < 0) {
             vel_x += decel_rate;
         }
+
         if (vel_y > 0) {
             vel_y -= decel_rate;
         }
+
         if (vel_y < 0) {
             vel_y += decel_rate;
         }
 
         if (get_collision(M0, PF) === 1) {
             fire0 = false;
-            sound(1, sound_vol, freq_1, type_1);
-            sound_duration = 5;
-
             fire_x = -4;
             fire_y = -8;
         }
 
         if (get_collision(P0, PF) === 1) {
-            sound(1, sound_vol, freq_1, type_1);
-            sound_duration = 5;
             if (pf_x !== pf_x_last) {
                 vel_x = -vel_x;
             }
@@ -373,5 +367,4 @@ function draw() {
     //print_large(12, 4 + 134, 'BABIES', 2, color_p0);
     requestAnimationFrame(draw);
 }
-
 draw();
