@@ -6,10 +6,10 @@ document.getElementById(myCanvas);
 
 
 var nemesis = [
-    'XXXX    ',
-    'XXXX    ',
-    'XXXX    ',
-    'XXXX    '];
+    'X  X    ',
+    ' XX     ',
+    ' XX     ',
+    'X  X    '];
 
 
 
@@ -326,6 +326,9 @@ function draw() {
 
         d = direction0 * 4;
         player0((SCREEN_X / 2), (SCREEN_Y / 2), blocky.slice(d, d + 4), 1, 2, 0, color_p0);
+
+
+        player1((SCREEN_X / 4), (SCREEN_Y / 4), nemesis, 1, 2, 0, color_p1);
 
         if (fire0 === true) {
             fire_x += fire_vx;
