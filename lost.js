@@ -111,6 +111,8 @@ var level_number = 1;
 var fire_v = 4;
 var accel_rate = 1;
 var decel_rate = 0.003;
+var vel_max = 8;
+
 
 var t = 0;
 var pos_x = (SCREEN_X / 2) * 50;
@@ -186,22 +188,34 @@ function keyDownHandler(event) {
         //up arrow
         direction0 = 1;
         vel_y -= accel_rate;
+        if (vel_y < -vel_max) {
+            vel_y = -vel_max;
+        }
     }
     if (key === 40) {
         //down arrow
         direction0 = 3;
         vel_y += accel_rate;
+        if (vel_y > vel_max) {
+            vel_y = vel_max;
+        }
     }
 
     if (key === 37) {
         //left arrow
         direction0 = 0;
         vel_x += accel_rate;
+        if (vel_x > vel_max) {
+            vel_x = vel_max;
+        }
     }
     if (key === 39) {
         //right arrow
         direction0 = 2;
         vel_x -= accel_rate;
+        if (vel_x < -vel_max) {
+            vel_x = -vel_max;
+        }
     }
 
     if ((key === 13) || (key === 32)) {
