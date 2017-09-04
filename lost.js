@@ -97,7 +97,10 @@ var direction0 = 0;
 var fire0 = false;
 
 var anamation = 0.0;
-var nemesis_y = 84.0;
+
+var nemesis_x = 4.0;
+var nemesis_y = 8.0;
+
 var direction1 = -1.0;
 var fire = 0;
 var fire_x = (SCREEN_X / 2) - 8;
@@ -320,7 +323,7 @@ function draw() {
                 j += 25;
             }
  //           j = i;
-            a = planet[j].slice(pf_x, 39) + planet[j].slice(0, pf_x);
+            a = planet[j].slice(pf_x, 40) + planet[j].slice(0, pf_x);
             playfield(i * 8, 8, a, color_pf);
         }
 
@@ -328,7 +331,7 @@ function draw() {
         player0((SCREEN_X / 2), (SCREEN_Y / 2), blocky.slice(d, d + 4), 1, 2, 0, color_p0);
 
 
-        player1((SCREEN_X / 4), (SCREEN_Y / 4), nemesis, 1, 2, 0, color_p1);
+        player1(SCREEN_X - ((pf_x * 4)), SCREEN_Y - ((pf_y * 8)), nemesis, 1, 2, 0, color_p1);
 
         if (fire0 === true) {
             fire_x += fire_vx;
