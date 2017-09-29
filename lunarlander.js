@@ -10,65 +10,119 @@ var ctx = c.getContext("2d");
 
 ctx.font = "10px Courier";
 
-var x = 50;
-var y = 0;
+
 var dx = 200;
 var thisTime = 0;
 var lastTime = Date.now();
 var dt = 1;
 
-
+// message strings
 var c = '';
 var d = 'LANDING';
 var e = 'CRASH';
-var o = 100;
-var dn = 0;
-var s = 400;
+// short version of 255
 var n = 255;
+
+// black
+var b = 'black';
+// white
+var w = 'white';
+
+var dn = 0;
+// screen size
+var s = 400;
+
+var o = 100;
+
+// width of lunar lander
 var z = 10;
+// length of screen minus lander width
 var Z = s - z;
-var mh = s / 20;
-var lp = 14;
-var pl = 20;
-var f = s;
-var ph = Math.random() * s;
-var am = s / 5;
-var fs = s / 32;
-var cr = "black";
-var cl = cr;
+
+// thruster left and right start out black
+var cl = b;
+var cr = b;
+
+// thruster y velocity adjustment
+var a = 2;
+
+// sound string is blank
 var ss = c;
-var y = z;
-var T = 11025;
+
+// lander start x location
 var x = (Math.random * Z) + z;
+// lander start y location
+var y = z;
+
+// set fuel to 400
+var f = s;
+
+// x and y velocities
 var u = 0;
 var v = 0;
+
+// lander module diameter, expands on explosion
 var r = 5;
-var cg = "white";
+// color of landing gear
+var cg = w;
+// reset explosion effect counter
 var wi = n;
 var q = 127;
 var p = -q;
+// message string clear
 var gs = c;
-var N = n * 4;
-var mn = 40;
+
+var mh = s / 20;
+// landing pad width
+var lp = 14;
+// landing pad location
+var pl = 20;
+
+
+// font size
+var fs = s / 32;
+
+// audio parameters
 var P = 0.01;
+var N = n * 4;
+var ph = Math.random() * s;
+var am = s / 5;
+
+// sample frequency for sound
+var T = 11025;
 
 
+// landing pad width
+var lp=14
+// landing pad location
+var pl=20
+// number of line segments making up mountains
+var mn=40
+// mountain height
+var mh=s/20
 
-var lp = 20;
+// Array for mountains
+var mx = [];
 var my = [];
 var j;
 
-for (j = 0; j < mn + 1; j = j + 1) {
-    my.push((Math.random() * mh) + (am * ( 4 - Math.sin((j + ph)/5))) - fs) ;
+// Mountain x and y points
+for (j = 0; j < mn + 1; j++) {
+    mx.push(z*j);
+    my.push(-(Math.random() * mh) + (am * (4 - Math.sin((j + ph) / 5))) - fs);
 }
+// last point
+mx.push(s);
+my.push(-(Math.random * mh) + s);
+// "Carve out" landing pad
+mx[pl]=mx[pl-1]+lp;
+my[pl]=my[pl-1];
+
+
 
 function draw() {
     // drawing code
-    var a,
-        b,
-        c,
-        d,
-        i;
+    var i;
     thisTime = Date.now();
     dt = thisTime - lastTime;
     lastTime = thisTime;
@@ -76,22 +130,23 @@ function draw() {
     dt = dt / 3;
     x += dx * dt;
     ctx.beginPath();
-    ctx.fillStyle = "black";
+    ctx.fillStyle = b;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.closePath();
     ctx.beginPath();
-    ctx.fillStyle = "white";
-    ctx.strokeStyle = "white";
+    ctx.fillStyle = w;
+    ctx.strokeStyle = w;
     ctx.arc(100, 75, 5, 0, 2 * Math.PI);
     ctx.stroke();
 
+
     ctx.moveTo(0, my[0]);
     ctx.beginPath();
-    for (i = 0; i < mn; i = i + 1) {
-        ctx.lineTo(i * s / mn, my[i]);
+    for (i = 0; i < mn; i++) {
+        ctx.lineTo(mx[i], my[i]);
     }
     ctx.stroke();
-    ctx.fillStyle = "white";
+    ctx.fillStyle = w;
     ctx.fillText("FUEL", 10, canvas.height - 10);
 
 
