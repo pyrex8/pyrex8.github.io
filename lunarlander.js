@@ -118,17 +118,49 @@ my.push(-(Math.random * mh) + s);
 mx[pl]=mx[pl-1]+lp;
 my[pl]=my[pl-1];
 
-
+var txt ='';
 
 function draw() {
     // drawing code
-    var i;
+    var i,
+        ax,
+        ay;
     thisTime = Date.now();
     dt = thisTime - lastTime;
     lastTime = thisTime;
 
     dt = dt / 3;
     x += dx * dt;
+
+    // if not crashed roll x movement across screen
+    if (gs==c && (x<0 || x>s)){
+      x=x-(Math.abs(x)/x)*s;
+    }
+
+    // if not crashed or landed update lunar module velocity and position
+    if (gs==c){
+        v=v+1;
+        x=(10*x+u)/10;
+        y=(10*y+v)/10;
+    }
+
+
+    // test for landing
+    if ((y+8)>=my[pl] && x>mx[pl-1] && x<mx[pl] && v<30){
+        gs=d;
+    }
+
+    // test for collision
+    for (i=0;i<mn;i++){
+        if (gs==c && mx[i]<=x && mx[i+1]>=x && (my[i]<=y || my[i+1]<=y)){
+             cr=1;
+            // color of landing gear is black during crash
+            cg=b;
+            gs=e;
+        }
+    }
+
+    // clear screen
     ctx.beginPath();
     ctx.fillStyle = b;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -136,19 +168,68 @@ function draw() {
     ctx.beginPath();
     ctx.fillStyle = w;
     ctx.strokeStyle = w;
-    ctx.arc(100, 75, 5, 0, 2 * Math.PI);
-    ctx.stroke();
+
+    //draw landing pad
+    ctx.moveTo(mx[pl-1],my[pl-1]);
+    ctx.lineTo,(mx[pl],my[pl]);
+
+    // explosion
+    if (wi>10 && gs==e){
+        // expanding lunar module
+        r=r+z;
+        // decreament explosion effect counter
+        wi=wi-z;
+        // sound string crash
+        ss=st;
+    }
 
 
+    x=50;
+    y=50;
+    // draw lunar module, radius expands for explosion
+//    ctx.fillStyle = wi;
+//    ctx.strokeStyle = wi;
+    for (i=0;i<50;i++){
+        ax=Math.sin(i/8);
+        ay=Math.cos(i/8);
+        ctx.fillRect((x+r*ax),(y+r*ay),1,1);
+    }
+
+    // draw landing gear
+//    ctx.fillStyle = cg;
+//    ctx.strokeStyle = cg;
+    ctx.moveTo(x+3,y+3);
+    ctx.lineTo,(x+4,y+6);
+    ctx.moveTo(x-3,y+3);
+    ctx.lineTo,(x-4,y+6);
+
+
+    // draw thruster fire
+//    ctx.fillStyle = cl;
+//    ctx.strokeStyle = cl;
+    ctx.moveTo(x+2,y+5);
+    ctx.lineTo,(x,y+9);
+//    ctx.fillStyle = cr;
+//    ctx.strokeStyle = cr;
+    ctx.moveTo(x-2,y+5);
+    ctx.lineTo,(x,y+9);
+
+
+
+    // draw mountains
+    ctx.fillStyle = sc;
+    ctx.strokeStyle = sc;
     ctx.moveTo(0, my[0]);
     ctx.beginPath();
     for (i = 0; i < mn; i++) {
         ctx.lineTo(mx[i], my[i]);
     }
+
+
     ctx.stroke();
     ctx.fillStyle = w;
-    ctx.fillText("FUEL", 10, canvas.height - 10);
-
+    txt = 'FUEL %3d     ALT %3d     VERT SPD %3d     HORZ SPD %3d',f,s-y,v,u;
+    ctx.fillText(txt, 10, canvas.height - 10);
 
     requestAnimationFrame(draw);
 }
