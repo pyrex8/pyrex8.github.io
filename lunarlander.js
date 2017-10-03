@@ -185,10 +185,10 @@ function draw() {
 
 
     x=50;
-    y=50;
+
     // draw lunar module, radius expands for explosion
-//    ctx.fillStyle = wi;
-//    ctx.strokeStyle = wi;
+    ctx.fillStyle = wi;
+    ctx.strokeStyle = wi;
     for (i=0;i<50;i++){
         ax=Math.sin(i/8);
         ay=Math.cos(i/8);
@@ -196,8 +196,8 @@ function draw() {
     }
 
     // draw landing gear
-//    ctx.fillStyle = cg;
-//    ctx.strokeStyle = cg;
+    ctx.fillStyle = cg;
+    ctx.strokeStyle = cg;
     ctx.moveTo(x+3,y+3);
     ctx.lineTo,(x+4,y+6);
     ctx.moveTo(x-3,y+3);
@@ -217,8 +217,8 @@ function draw() {
 
 
     // draw mountains
-    ctx.fillStyle = sc;
-    ctx.strokeStyle = sc;
+//    ctx.fillStyle = sc;
+//    ctx.strokeStyle = sc;
     ctx.moveTo(0, my[0]);
     ctx.beginPath();
     for (i = 0; i < mn; i++) {
@@ -231,7 +231,8 @@ function draw() {
     txt = 'FUEL %3d     ALT %3d     VERT SPD %3d     HORZ SPD %3d',f,s-y,v,u;
     ctx.fillText(txt, 10, canvas.height - 10);
 
-    requestAnimationFrame(draw);
+//    requestAnimationFrame(draw);
 }
 
-draw();
+setInterval(draw, 200);
+//draw();
