@@ -50,7 +50,7 @@ var a = 2;
 var ss = c;
 
 // lander start x location
-var x = (Math.random * Z) + z;
+var x = (Math.random() * Z) + z;
 // lander start y location
 var y = z;
 
@@ -91,6 +91,8 @@ var am = s / 5;
 // sample frequency for sound
 var T = 11025;
 
+var st ='';
+var se = '';
 
 // landing pad width
 var lp=14
@@ -130,7 +132,7 @@ function draw() {
     lastTime = thisTime;
 
     dt = dt / 3;
-    x += dx * dt;
+ //   x += dx * dt;
 
     // if not crashed roll x movement across screen
     if (gs==c && (x<0 || x>s)){
@@ -143,7 +145,6 @@ function draw() {
         x=(10*x+u)/10;
         y=(10*y+v)/10;
     }
-
 
     // test for landing
     if ((y+8)>=my[pl] && x>mx[pl-1] && x<mx[pl] && v<30){
@@ -173,6 +174,7 @@ function draw() {
     ctx.moveTo(mx[pl-1],my[pl-1]);
     ctx.lineTo,(mx[pl],my[pl]);
 
+
     // explosion
     if (wi>10 && gs==e){
         // expanding lunar module
@@ -183,12 +185,9 @@ function draw() {
         ss=st;
     }
 
-
-    x=50;
-
     // draw lunar module, radius expands for explosion
-    ctx.fillStyle = wi;
-    ctx.strokeStyle = wi;
+//    ctx.fillStyle = w;
+//    ctx.strokeStyle = w;
     for (i=0;i<50;i++){
         ax=Math.sin(i/8);
         ay=Math.cos(i/8);
@@ -196,8 +195,8 @@ function draw() {
     }
 
     // draw landing gear
-    ctx.fillStyle = cg;
-    ctx.strokeStyle = cg;
+ //   ctx.fillStyle = cg;
+ //   ctx.strokeStyle = cg;
     ctx.moveTo(x+3,y+3);
     ctx.lineTo,(x+4,y+6);
     ctx.moveTo(x-3,y+3);
@@ -230,6 +229,7 @@ function draw() {
     ctx.fillStyle = w;
     txt = 'FUEL %3d     ALT %3d     VERT SPD %3d     HORZ SPD %3d',f,s-y,v,u;
     ctx.fillText(txt, 10, canvas.height - 10);
+    ctx.fillText(x, 200, 200);
 
 //    requestAnimationFrame(draw);
 }
