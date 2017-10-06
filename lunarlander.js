@@ -78,7 +78,7 @@ var lp = 14;
 // landing pad location
 var pl = 20;
 
-
+var g = 2 * Math.random()
 // font size
 var fs = s / 32;
 
@@ -86,7 +86,7 @@ var fs = s / 32;
 var P = 0.01;
 var N = n * 4;
 var ph = Math.random() * s;
-var am = s / 5;
+var am = s / (5 + Math.random() * 5) ;
 
 // sample frequency for sound
 var T = 11025;
@@ -111,7 +111,7 @@ var j;
 // Mountain x and y points
 for (j = 0; j < mn + 1; j++) {
     mx.push(z*j);
-    my.push(-(Math.random() * mh) + (am * (4 - Math.sin((j + ph) / 5))) - fs);
+    my.push(-(Math.random() * mh) + 3*s/4 + (am * (Math.sin((j*6*g/mn + ph)))));
 }
 // last point
 mx.push(s);
