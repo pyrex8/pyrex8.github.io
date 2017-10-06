@@ -202,7 +202,6 @@ function draw() {
     ctx.moveTo(x-3,y+3);
     ctx.lineTo,(x-4,y+6);
 
-
     // draw thruster fire
 //    ctx.fillStyle = cl;
 //    ctx.strokeStyle = cl;
