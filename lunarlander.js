@@ -1,14 +1,9 @@
-/*global canvas, keyDownHandler, tapDownHandler, requestAnimationFrame*/
-/*jslint node: true */
-/*jslint bitwise: true*/
-/*global Float32Array*/
-'use strict';
 
 
 var c = document.getElementById("canvas");
 var ctx = c.getContext("2d");
 
-ctx.font = "10px Courier";
+ctx.font = "12px Courier";
 
 
 var dx = 200;
@@ -220,9 +215,10 @@ function draw() {
     // update drawing
     ctx.stroke();
     ctx.fillStyle = w;
-    txt = 'FUEL %3d     ALT %3d     VERT SPD %3d     HORZ SPD %3d',f,s-y,v,u;
+    ww = s-y
+    txt = 'FUEL '+f+'    ALT '+Math.floor(s-y)+'     VERT SPD '+v+'     HORZ SPD '+u;
     ctx.fillText(txt, 10, canvas.height - 10);
-    ctx.fillText(gs, canvas.width/2, canvas.height/2);
+    ctx.fillText(gs, canvas.width/2 -20, canvas.height/2);
 }
 
 setInterval(draw, 200);
