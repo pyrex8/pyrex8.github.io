@@ -1,145 +1,140 @@
 
+M = Math;
 
-var c = document.getElementById("canvas");
-var ctx = c.getContext("2d");
+C = document.getElementById("canvas").getContext("2d");
 
-ctx.font = "12px Courier";
+C.font = "12px Courier";
 
 
-var dx = 200;
-var thisTime = 0;
-var lastTime = Date.now();
-var dt = 1;
+
 
 // message strings
-var c = '';
-var d = 'LANDING';
-var e = 'CRASH';
+c = '';
+d = 'LANDING';
+e = 'CRASH';
 // short version of 255
-var n = 255;
+n = 255;
 
 // black
-var b = 'black';
+b = 'black';
 // white
-var w = 'white';
+w = 'white';
 
-var dn = 0;
+dn = 0;
 // screen size
-var s = 400;
+s = 400;
 
-var o = 100;
+o = 100;
 
 // width of lunar lander
-var z = 10;
+z = 10;
 // length of screen minus lander width
-var Z = s - z;
+Z = s - z;
 
 // thruster left and right start out black
-var cl = b;
-var cr = b;
+cl = b;
+cr = b;
 
 // thruster y velocity adjustment
-var a = 2;
+a = 2;
 
 // sound string is blank
-var ss = c;
+ss = c;
 
 // lander start x location
-var x = (Math.random() * Z) + z;
+x = (M.random() * Z) + z;
 // lander start y location
-var y = z;
+y = z;
 
 // set fuel to 400
-var f = s;
+f = s;
 
 // x and y velocities
-var u = 0;
-var v = 0;
+u = 0;
+v = 0;
 
 // lander module diameter, expands on explosion
-var r = 5;
+r = 5;
 // color of landing gear
-var cg = w;
+cg = w;
 // reset explosion effect counter
-var wi = n;
-var q = 127;
-var p = -q;
+wi = n;
+q = 127;
+p = -q;
 // message string clear
-var gs = c;
+gs = c;
 
-var mh = s / 20;
+mh = s / 20;
 // landing pad width
-var lp = 14;
+lp = 14;
 // landing pad location
-var pl = 20;
+pl = 20;
 
-var g = 2 * Math.random()
+g = 2 * M.random()
 // font size
-var fs = s / 32;
+fs = s / 32;
 
 // audio parameters
-var P = 0.01;
-var N = n * 4;
-var ph = Math.random() * s;
-var am = s / (5 + Math.random() * 5) ;
+P = 0.01;
+N = n * 4;
+ph = M.random() * s;
+am = s / (5 + M.random() * 5) ;
 
 // sample frequency for sound
-var T = 11025;
+T = 11025;
 
-var st ='';
-var se = '';
+st ='';
+se = '';
 
 // landing pad width
-var lp=14
+lp=14
 // landing pad location
-var pl=20
+pl=20
 // number of line segments making up mountains
-var mn=40
+mn=40
 // mountain height
-var mh=s/20
+mh=s/20
 
 // Array for mountains
-var mx = [];
-var my = [];
-var j;
+mx = [];
+my = [];
+j = 0;
 
 // Mountain x and y points
-for (j = 0; j < mn + 1; j++) {
-    mx.push(z*j);
-    my.push(-(Math.random() * mh) + (s - am - 2*fs) + (am * (Math.sin((j*6*g/mn + ph)))));
-}
+
+//for(j=20;j--;){}
+for (j = 0; j < mn + 1; j++)
+    mx.push(z*j),
+    my.push(-(M.random() * mh) + (s - am - 2*fs) + (am * (M.sin((j*6*g/mn + ph)))));
+
 // last point
 mx.push(s);
-my.push(-(Math.random * mh) + s);
+my.push(-(M.random * mh) + s);
 // "Carve out" landing pad
 mx[pl]=mx[pl-1]+lp;
 my[pl]=my[pl-1];
 
-var txt ='';
+txt ='';
 
-function draw() {
+    i = 0;
+        ax = 0;
+        ay = 0;
+
+setInterval(function() {
     // drawing code
-    var i,
-        ax,
-        ay;
-    thisTime = Date.now();
-    dt = thisTime - lastTime;
-    lastTime = thisTime;
 
-    dt = dt / 3;
- //   x += dx * dt;
 
     // if not crashed roll x movement across screen
-    if (gs==c && (x<0 || x>s)){
-      x=x-(Math.abs(x)/x)*s;
-    }
+    if (gs==c && (x<0 || x>s))
+      x=x-(M.abs(x)/x)*s;
+
 
     // if not crashed or landed update lunar module velocity and position
-    if (gs==c){
-        v=v+1;
-        x=(10*x+u)/10;
+    if (gs==c)
+        v=v+1,
+        x=(10*x+u)/10,
         y=(10*y+v)/10;
-    }
+
 
     // test for landing
     if ((y+8)>=my[pl] && x>mx[pl-1] && x<mx[pl] && v<30){
@@ -147,79 +142,72 @@ function draw() {
     }
 
     // test for collision
-    for (i=0;i<mn;i++){
-        if (gs==c && mx[i]<=x && mx[i+1]>=x && (my[i]<=y || my[i+1]<=y)){
-             cr=1;
+    for (i=0;i<mn;i++)
+        if (gs==c && mx[i]<=x && mx[i+1]>=x && (my[i]<=y || my[i+1]<=y))
+             cr=1,
             // color of landing gear is black during crash
-            cg=b;
+            cg=b,
             gs=e;
-        }
-    }
 
     // clear screen
-    ctx.beginPath();
-    ctx.fillStyle = b;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-//    ctx.closePath();
-//    ctx.beginPath();
-    ctx.fillStyle = w;
-    ctx.strokeStyle = w;
+    C.beginPath();
+    C.fillStyle = b;
+    C.fillRect(0, 0, canvas.width, canvas.height);
+//    C.closePath();
+//    C.beginPath();
+    C.fillStyle = w;
+    C.strokeStyle = w;
 
     // explosion
-    if (wi>10 && gs==e){
+    if (wi>10 && gs==e)
         // expanding lunar module
-        r=r+z;
+        r=r+z,
         // decreament explosion effect counter
-        wi=wi-z;
+        wi=wi-z,
         // sound string crash
         ss=st;
-    }
 
     // draw lunar module, radius expands for explosion
     if (wi > 10)
-    {
-        for (i=0;i<50;i++){
-            ax=Math.sin(i/8);
-            ay=Math.cos(i/8);
-            ctx.fillRect((x+r*ax),(y+r*ay),1,1);
-        }
-    }
+        for (i=0;i<50;i++)
+            ax=M.sin(i/8),
+            ay=M.cos(i/8),
+            C.fillRect((x+r*ax),(y+r*ay),1,1);
 
 
     // draw mountains
-    ctx.moveTo(0, my[0]);
-    for (i = 0; i < mn; i++) {
-        ctx.lineTo(mx[i], my[i]);
-    }
+    C.moveTo(0, my[0]);
+    for (i = 0; i < mn; i++)
+        C.lineTo(mx[i], my[i]);
 
     // draw landing pad
-    ctx.fillRect(mx[pl-1],my[pl-1]-1,lp,2);
+    C.fillRect(mx[pl-1],my[pl-1]-1,lp,2);
 
    // draw landing gear
     if (cg!=b)
-    {
-        ctx.moveTo(x+3,y+4);
-        ctx.lineTo(x+6,y+8);
-        ctx.moveTo(x-3,y+4);
-        ctx.lineTo(x-6,y+8);
+
+        C.moveTo(x+3,y+4),
+        C.lineTo(x+6,y+8),
+        C.moveTo(x-3,y+4),
+        C.lineTo(x-6,y+8),
 
         // draw thruster fire
-        ctx.moveTo(x+2,y+5);
-        ctx.lineTo(x,y+9);
-        ctx.moveTo(x-2,y+5);
-        ctx.lineTo(x,y+9);
-    }
+        C.moveTo(x+2,y+5),
+        C.lineTo(x,y+9),
+        C.moveTo(x-2,y+5),
+        C.lineTo(x,y+9);
 
 
 
     // update drawing
-    ctx.stroke();
-    ctx.fillStyle = w;
+    C.stroke();
+    C.fillStyle = w;
     ww = s-y
-    txt = 'FUEL '+f+'    ALT '+Math.floor(s-y)+'     VERT SPD '+v+'     HORZ SPD '+u;
-    ctx.fillText(txt, 10, canvas.height - 10);
-    ctx.fillText(gs, canvas.width/2 -20, canvas.height/2);
-}
 
-setInterval(draw, 200);
-//draw();
+    // ~~ = Math.Floor()
+    txt = 'FUEL '+f+'    ALT '+~~(s-y)+'     VERT SPD '+v+'     HORZ SPD '+u;
+    C.fillText(txt, 10, canvas.height - 10);
+    C.fillText(gs, canvas.width/2 -20, canvas.height/2);
+
+}, 200);
+
