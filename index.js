@@ -1,214 +1,265 @@
-/*global myCanvas, keyDownHandler,  SCREEN_X, SCREEN_Y, sound, screen, background, print_small, player1, requestAnimationFrame*/
-/*jslint node: true */
-/*jslint bitwise: true*/
-'use strict';
-document.getElementById(myCanvas);
 
-// Game states
-var PAUSED = 1;
-var READY = 0;
-var PLAYING = 2;
-var DONE = 3;
-
-var pman = [
-    '  XXX   ',
-    ' XX XX  ',
-    'XXXXXXX ',
-    '    XXX ',
-    'XXXXXXX ',
-    ' XXXXX  ',
-    '  XXX   ',
-
-    '  XXX   ',
-    ' X X X  ',
-    'XXXXXXX ',
-    'X     X ',
-    'XXXXXXX ',
-    ' XXXXX  ',
-    '  XXX   ',
-
-    '  XXX   ',
-    ' XX XX  ',
-    'XXXXXXX ',
-    'XXX     ',
-    'XXXXXXX ',
-    ' XXXXX  ',
-    '  XXX   ',
-
-    '  XXX   ',
-    ' XXXXX  ',
-    'XXXXXXX ',
-    'XXXXXXX ',
-    'XXXXXXX ',
-    ' XXXXX  ',
-    '  XXX   '];
+a = document.getElementById("canvas");
 
 
-var game_list = [
-    '         BLOCK THE KNIGHT              ',
-    '         PITFALL                       ',
-    '         LUNAR LANDER                  ',
-    '         LOST                          ',
-    '         ------                        ',
-    '         ------                        ',
-    '         ------                        ',
-    '         ------                        ',
-    '         ------                        ',
-    '         ------                        ',
-    '         ------                        ',
-    '         ------                        '];
+//w = a.width  = window.innerWidth;
+//h = a.height = window.innerHeight;
 
-var canvas = document.getElementById("myCanvas");
-var ctx = canvas.getContext("2d");
-
-var thisTime = 0;
-var lastTime = Date.now();
-var dt = 1;
-
-var game_state = READY;
-
-var animation = 0.0;
-
-var game_number = 0;
-
-var color_p0 = 0;
-var color_p1 = 16;
-var color_pf = 3 + (8 * 8);
-var color_bk1 = 76;
-var color_bk2 = 74;
-
-var sound_duration = 0;
-
-var sound_vol = 0.3;
-var freq_1 = 110;
-var freq_2 = 44;
-var type_1 = 'square';
-var type_2 = 'square';
-
-
-
-document.addEventListener('keydown', keyDownHandler, false);
-
-function onPause() {
-    sound_duration = 0;
-    sound(1, 0, freq_1, type_1);
-    sound(2, 0, freq_2, type_2);
+function canvas_resize()
+{
+    canvas.style.width = window.innerWidth + 'px';
+    canvas.style.height = window.innerHeight + 'px';
 }
 
-function onResume() {
-    sound_duration = 0;
+window.addEventListener("resize", canvas_resize);
+canvas_resize();
+
+/*
+ * a = <canvas>
+ * b = <body>
+ * c = canvas context 2D
+ * d = document
+ * e = 
+ * f = frequency of sound
+ * g = web gl??????
+ * h = height of canvas = 512
+ * i = platform test
+ * j = current platform level
+ * k =
+ * l = left
+ * m = platform pattern 1
+ * n = platform pattern 2
+ * o = platform pattern 3
+ * p = test for level
+ * q = last test for level
+ * r = right
+ * s = game high score
+ * t = game score
+ * u = platform offset
+ * v = 255
+ * w = width of canvas = 680
+ * x = jumpman X location
+ * y = jumpman Y location
+ * z = jumpman location 0 to 7
+ */
+
+/*
+ * A = audio context for web audio
+ * B = 400
+ * C = 'context'
+ * D
+ * E
+ * F = reserved
+ * G = audio gainModule
+ * H = Frequency
+ * I = platform 1 y location
+ * J = platform 2 y location
+ * K = platform 3 y location
+ * L = 'fillStyle'
+ * M = Math
+ * N = number
+ * O = oscillator
+ * P = player sprite index
+ * Q = 
+ * R = Random
+ * S = sprite function
+ * T = text
+ * U = X loop iterator
+ * V = Y loop iterator
+ * W = High Score
+ * X = sprite X location
+ * Y = sprite Y location
+ * Z = level function
+ */
+
+
+
+// Resize the canvas, storing width and height for later use.
+B = 512
+w = a.width = B;
+h = a.height = B;
+
+// Some short-hands for Math and Math.random.
+M=Math;
+R=M.random;
+
+
+// Platform drawer
+function Z(T, Y) 
+{
+  for (U = 8; U--;)
+    (T & (1<<U)) && C.F(512 - 64 - U * 64, Y * 2, 64, 8)
 }
 
-function onAmazonPlatformReady() {
-    document.addEventListener("pause", onPause, false);
-    document.addEventListener("resume", onResume, false);
+// z, x, q, i, p, j
+
+// global variables
+I = J = K = s = f = m = n = o = z = p = r = l = t = u = q = i = j = 0;
+n = w
+L = 'fillStyle'
+x = 16
+y = 128
+v = 255
+
+// web audio API to generate sound
+A = new window.AudioContext;
+O = A.createOscillator();
+G = A.createGain();
+O.type = 'square';
+O.connect(G);
+G.connect(A.destination);
+O.start();
+
+onkeydown = function(event) 
+{   
+    // arrow left
+    if (event.keyCode == 37)
+    {
+        l = 1;f = 5
+    }
+    // arrow right
+    if (event.keyCode == 39)
+    {
+        r = 1;f = 5 
+    }       
 }
 
-document.addEventListener("amazonPlatformReady", onAmazonPlatformReady, false);
-
-
-
-
-function keyDownHandler(event) {
-    var key = event.which || event.keyCode;
-    if (key === 38) {
-        //up arrow
-        game_state = PLAYING;
-        if (game_number > 0) {
-            game_number -= 1;
-        } else {
-            game_number = 11;
-        }
-
-    }
-    if (key === 40) {
-        //down arrow
-        game_state = PLAYING;
-        if (game_number < 11) {
-            game_number += 1;
-        } else {
-            game_number = 0;
-        }
-    }
-    if ((key === 13) || (key === 32)) {
-        if (game_number === 0) {
-            location.href = "https://pyrex8.github.io/block_the_knight.html";
-        }
-        if (game_number === 1) {
-            location.href = "https://pyrex8.github.io/pitfall.html";
-        }
-        if (game_number === 2) {
-            location.href = "https://pyrex8.github.io/lunarlander.html";
-        }
-        if (game_number === 3) {
-            location.href = "https://pyrex8.github.io/lost.html";
-        }
-    }
+onkeyup = function(event) 
+{
+    // arrow left
+    if (event.keyCode == 37)
+    {
+        l = 0;f =0
+    }    
+    // arrow right
+    if (event.keyCode == 39)
+    {
+        r = 0;f = 0  
+    }      
 }
 
+// game loop
+setInterval(function() 
+{
+  //test for ARROW_LEFT = 37; 
+  if (l)
+  {   
+        x += 4;
+        if (x > v)
+          x = v
+  }
+
+  //test for ARROW_RIGHT = 39;
+  if (r)
+  {   
+      x -= 4;
+      if (x<8)
+          x = 8        
+
+  } 
+
+  // platform scrolling
+  u -= 1;
+  if (u < 1)
+  {
+      u = 85;
+      m = n
+      n = o
+      o = 0|R()*254;
+  }
+  //64
+  I = u
+  J = u + 85
+  K = u + 85*2
+
+  // current level
+  j = 0;
+  if ((y >= I) & (y <= I + 4))
+  {
+      j = m
+  }
+  if ((y >= J) & (y <= J + 4))
+  {
+      j = n
+  }
+  if ((y >= K) & (y <= K + 4))
+  {
+      j = o
+  }    
 
 
-function draw() {
-    var a,
-        b,
-        i,
-        color_list;
+  z = (x / 32) & v;
 
-    thisTime = Date.now();
-    dt = thisTime - lastTime;
-    lastTime = thisTime;
+  // Make sure jumpman is completely off of platform
+  // if  q < 0.2 test segment to right z/2
+  // if  q > 0.8 test segment to left z*2
+  // 
+  q = (x / 32) - z
 
-    dt = dt / 3;
+  i = 0
+  p = (j & ( 1 << z))
+  if (p == 0)
+  {
+      if (q < 0.2)
+          i = j & (1 << (z - 1)) 
+      if (q > 0.8)
+          i = j & (1 << (z + 1))
+  }
 
-    if (sound_duration > 1) {
-        sound_duration -= 1;
-    } else {
-        sound(1, 0, freq_1, type_1);
-        sound(2, 0, freq_2, type_2);
-    }
+  // on platform
+  if (p || i)
+  {
+      y--
+  }
+  // off platform
+  else
+  {
+      y+=3
+  }    
 
+  // score (timer)
+  t += 1;    
 
-    if (game_state === PLAYING) {
-        game_state = READY;
-        sound(1, sound_vol, freq_1, type_1);
-        sound_duration = 2;
-    }
+  //set sound frequency
+  O.frequency.value = f;
+  if (f > 10) f = 0    
 
+  if ((y < 5) || (y > v))
+  {
+      y = y & v
+      if (t > s)
+      {
+        s = t
+      }
+      t = 0
+      f = 100
+  }
 
+  with(C = a.getContext('2d')) 
+  {
+      // Create a shortcut for fillRect
+      C.F = fillRect;
 
-    color_p1 = (color_p1 + 8) & 0x7F;
-    animation += dt / 100.0;
-    if (animation >= 4.0) {
-        animation = 0.0;
-        color_p0 = (color_p0 + 8) & 0x78;
-    }
+      // draw background
+      C[L] = 'Black';
+      F(0, 0, w, h);
 
-    a = Math.trunc(animation);
-    b = (4 - a) & 0x03;
+      // draw platforms
+      C[L] = 'White';
+      Z(m, I);
+      Z(n, J);
+      Z(o, K);
+    
+      // draw player
+      C[L] = 'Yellow';
+      C.F(496 - x * 2, y * 2 - 32, 32, 32)
 
-    screen();
-    background(0, SCREEN_Y, color_bk1);
-    background(42 + game_number * 14, 14, color_bk2);
-    print_small(2, 2, '    ATARI 2600 GAMES IN JAVASCRIPT     ', 2, color_bk2);
-    print_small(2, 16, '    USE ARROWS AND ENTER TO SELECT     ', 1, color_bk2);
-    print_small(2, 30, '   --------------------------------    ', 2, color_p0);
+      // Draw score
+      C[L] = 'Green';
+      font = "20px Courier New";
+      fillText(t, 90, 20);
+      fillText(s, 350, 20);
 
-    for (i = 0; i < 12; i += 1) {
-        color_list = color_bk2;
-        if (i === game_number) {
-            color_list = color_bk1;
-        }
-        print_small(2, 44 + i * 14, game_list[i], 2, color_list);
-    }
+  }
+}, 20); // 50 frames per second
 
-    for (i = 0; i < 7; i += 1) {
-        player1(14, 42 + game_number * 14 + (i * 2), pman.slice((b * 7) + i, (b * 7) + i + 1), 1, 2, 0, color_p0 + 7 - i);
-    }
-    for (i = 0; i < 7; i += 1) {
-        player1(135, 42 + game_number * 14 + (i * 2), pman.slice((b * 7) + i, (b * 7) + i + 1), 1, 2, 0, color_p1 + i);
-    }
-
-    requestAnimationFrame(draw);
-}
-
-draw();
